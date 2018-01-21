@@ -1,5 +1,7 @@
 # ztond – React To Do List
 
+![](ztond-v1.jpg)
+
 Building on the app developed in [Propulsion Bootcamp](https://github.com/kimbylr/fswd/tree/master/week7/day4). The goal is to extend the app to a useable stage, including these concepts:
 
 * todos belong to lists ("contexts")
