@@ -9,6 +9,6 @@ Building on the app developed in [Propulsion Bootcamp](https://github.com/kimbyl
 * delete/archive contexts and todos
 * reorder contexts and todos
 
-See also [Propulsion Bootcamp](https://github.com/kimbylr/todo_server)
+See also [Todo Server](https://github.com/kimbylr/todo_server)
 
 (The name is a wink at rural Swiss dialects and means "to do".)
