@@ -1,0 +1,12 @@
+header {
+  background-color: #69A6CE;
+  height: 80px;
+  padding: 20px;
+  text-align: center;
+}
+
+header img {
+  height: 72px;
+  position: relative;
+  top: 4px;
+}

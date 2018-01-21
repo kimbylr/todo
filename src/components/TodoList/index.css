@@ -1,0 +1,130 @@
+.todos {
+  margin: 0 0 30px;
+}
+
+.TodoItem-completed {
+  text-decoration: line-through;
+  color: #ccc;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+li {
+  margin: 3px 0;
+  padding: 8px 25px;
+  color: #333;
+  font-size: 20px;
+  background-color: #fbfbfb;
+  cursor: default;
+}
+
+li .clickArea {
+  width: calc(100% - 60px);
+}
+
+
+/* if there are no todos */
+
+.all-done {
+  font-size: 80px;
+  position: relative;
+  color: #ccc;
+  margin: 20px auto 0;
+  padding: 10px 0;
+  text-align: center;
+  background-color: #fbfbfb;
+}
+
+
+/* edit text + rearrange */
+
+.buttons {
+  display: inline;
+  float: right;
+  color: #999;
+  font-size: 16px;
+  position: relative;
+  top: -20px;
+}
+
+.buttons span {
+  padding: 3px 0 3px 3px;
+  margin-left: 12px;
+}
+
+.buttons .ion-edit:hover {
+  color: #555;
+}
+
+.buttons .ion-drag:hover {
+  color: #222;
+}
+
+
+/* popover to edit todo text */
+
+.edit-todo-popover {
+  position: absolute;
+  top: -140px;
+  z-index: 20;
+  border: 3px solid #222;
+  border-radius: 5px;
+  right: 20px;
+  margin-top: 50px;
+  padding: 7px 0;
+  background-color: #d2e4f0;
+  height: 60px;
+  /* box-shadow: 0 0 10px 1px #ccc; */
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+}
+
+.edit-todo-popover.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.edit-todo-popover::before {
+  width: 0;
+  height: 0;
+  content: '';
+  top: 74px;
+  left: 178px;
+  position: absolute;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #222;
+}
+
+.edit-todo-popover::after {
+  width: 0;
+  height: 0;
+  content: '';
+  top: 74px;
+  left: 182px;
+  position: absolute;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid #d2e4f0;
+}
+
+.edit-todo-popover input {
+  width: calc(100% - 52px);
+  height: 40px;
+  font-size: 18px;
+  padding: 0 10px;
+  border: 0px;
+  margin: 10px 15px 0;
+  border: 1px solid #ccc;
+  font-weight: 400;
+  color: #444;
+}
+
+.edit-todo-popover input::placeholder {
+  color: #ccc;
+}
