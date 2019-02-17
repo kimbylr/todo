@@ -1,66 +1,93 @@
 import { API_BASE_URL } from '../../resources/API_URL';
 
-import {
-  PUSH_TODO,
-  CHANGE_TODO,
-} from '../actions';
-
+import { PUSH_TODO, CHANGE_TODO, CHANGE_TODOS } from '../actions';
 
 export const pushTodo = (todo, activeContext) => ({
   type: PUSH_TODO,
   payload: todo,
-  activeContext
+  activeContext,
 });
 
-export const addTodo = (text) => (dispatch, getState) => {
+export const addTodo = text => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext;
   const params = {
     method: 'POST',
-    headers: { 'Content-type': 'application/json', 'Authorization': getState().passphrase },
-    body: JSON.stringify({ content: text })
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: getState().passphrase,
+    },
+    body: JSON.stringify({ content: text }),
   };
 
   return fetch(url, params)
-    .then( response => response.json() )
-    .then( todo => dispatch(pushTodo(todo, activeContext)) )
-    .catch( error => {} );
-}
-
+    .then(response => response.json())
+    .then(todo => dispatch(pushTodo(todo, activeContext)))
+    .catch(error => {});
+};
 
 export const changeTodo = (todo, activeContext) => ({
   type: CHANGE_TODO,
   payload: todo,
-  activeContext
+  activeContext,
 });
 
-export const triggerCompleted = (todo) => (dispatch, getState) => {
+export const triggerCompleted = todo => (dispatch, getState) => {
   const activeContext = getState().activeContext;
-  const url = API_BASE_URL + activeContext + '/' + todo._id;
+  const url = API_BASE_URL + activeContext + '/' + todo.id;
   const params = {
     method: 'PUT',
-    headers: { 'Content-type': 'application/json', 'Authorization': getState().passphrase },
-    body: JSON.stringify({ completed: !todo.completed })
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: getState().passphrase,
+    },
+    body: JSON.stringify({ completed: !todo.completed }),
   };
 
   return fetch(url, params)
-    .then( response => response.json() )
-    .then( todo => dispatch(changeTodo(todo, activeContext)) )
-    .catch( error => {} );
-}
+    .then(response => response.json())
+    .then(todo => dispatch(changeTodo(todo, activeContext)))
+    .catch(error => {});
+};
 
 export const changeText = (todoId, content) => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todoId;
-  console.log(url);
   const params = {
     method: 'PUT',
-    headers: { 'Content-type': 'application/json', 'Authorization': getState().passphrase },
-    body: JSON.stringify({ content })
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: getState().passphrase,
+    },
+    body: JSON.stringify({ content }),
   };
 
   return fetch(url, params)
-    .then( response => response.json() )
-    .then( todo => dispatch(changeTodo(todo, activeContext)) )
-    .catch( error => {} );
-}
+    .then(response => response.json())
+    .then(todo => dispatch(changeTodo(todo, activeContext)))
+    .catch(error => {});
+};
+
+export const changeTodos = (activeContext, todos) => ({
+  type: CHANGE_TODOS,
+  payload: todos,
+  activeContext,
+});
+
+export const changeOrder = ids => (dispatch, getState) => {
+  const activeContext = getState().activeContext;
+  const url = API_BASE_URL + activeContext + '/order/';
+  const params = {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: getState().passphrase,
+    },
+    body: JSON.stringify(ids),
+  };
+
+  return fetch(url, params)
+    .then(response => response.json())
+    .then(todos => dispatch(changeTodos(activeContext, todos)))
+    .catch(error => {});
+};

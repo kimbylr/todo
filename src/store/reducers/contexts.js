@@ -5,32 +5,39 @@ import {
   REMOVE_CONTEXT,
   PUSH_TODO,
   CHANGE_TODO,
+  CHANGE_TODOS,
 } from '../actions';
 
-// '5a3b871056fee56c85faf6c4': { id: '5a3b871056fee56c85faf6c4', label: 'DO', todos, order, archived }
+/* '5a3b871056fee56c85faf6c4': {
+  id: '5a3b871056fee56c85faf6c4',
+  label: 'DO',
+  todos: [{}, {} {
+    completed: boolean,
+    content: "...",
+    id: '5a3b871fee56c85faf6c4056',
+    updatedAt: '2019-02-17T17:29:51.747Z'
+  }],
+  archived: boolean }
+*/
 const contexts = (state = {}, action) => {
-  switch(action.type) {
-
+  switch (action.type) {
     case SET_CONTEXTS: {
       const contexts = {};
-      action.payload.forEach( context => {
-        const { _id: id, label, todos, order, archived } = context;
-        const todoObj = {};
-        todos.forEach( todo => { todoObj[todo._id] = todo; });
-        contexts[id] = { id, label, todos: todoObj, order, archived };
-      })
+      action.payload.forEach(context => {
+        const { id, label, todos, archived, updatedAt } = context;
+        contexts[id] = { id, label, todos, archived, updatedAt };
+      });
       return contexts;
     }
 
     case PUSH_CONTEXT: {
-      const { _id: id, label, todos, order, archived } = action.payload;
-      return ( { ...state, [id]: { id, label, todos, order, archived } } );
+      const { id, label, todos, archived, updatedAt } = action.payload;
+      return { ...state, [id]: { id, label, todos, archived, updatedAt } };
     }
 
     case PUSH_NEW_CONTEXT_LABEL: {
-      const { _id: id, label, order, archived } = action.payload;
-      const todos = {...state[id].todos};
-      return ( { ...state, [id]: { id, label, todos, order, archived } } );
+      const { id, label, archived, updatedAt, todos } = action.payload;
+      return { ...state, [id]: { id, label, todos, archived, updatedAt } };
     }
 
     case REMOVE_CONTEXT: {
@@ -40,22 +47,35 @@ const contexts = (state = {}, action) => {
     }
 
     case PUSH_TODO: {
-      const currentContext = state[action.activeContext];
-      currentContext.todos[action.payload._id] = action.payload;
-      currentContext.order.push(action.payload._id);
-      return { ...state, [currentContext.id]: currentContext };
+      const context = state[action.activeContext];
+      const todos = [...context.todos, action.payload];
+      return { ...state, [context.id]: { ...context, todos } };
     }
 
     case CHANGE_TODO: {
+      const { activeContext, payload: changedTodo } = action;
+      const todos = state[activeContext].todos.map(todo => {
+        return todo.id === changedTodo.id ? changedTodo : todo;
+      });
+
+      return {
+        ...state,
+        [activeContext]: { ...state[activeContext], todos },
+      };
+    }
+
+    case CHANGE_TODOS: {
       const currentContextId = action.activeContext;
-      const todos = { ...state[currentContextId].todos }
-      todos[action.payload._id] = action.payload;
-      return { ...state, [currentContextId]: { ...state[currentContextId], todos } };
+      const { id, label, todos, archived, updatedAt } = action.payload;
+      return {
+        ...state,
+        [currentContextId]: { id, label, todos, archived, updatedAt },
+      };
     }
 
     default:
       return state;
   }
-}
+};
 
 export default contexts;

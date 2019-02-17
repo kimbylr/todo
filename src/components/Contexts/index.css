@@ -43,6 +43,7 @@
   background-color: inherit;
   border: none;
   color: #999;
+  cursor: pointer;
 }
 
 .contexts button.edit-contexts,

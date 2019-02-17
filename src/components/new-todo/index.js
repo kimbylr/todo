@@ -5,36 +5,34 @@ import { addTodo } from '../../store/actions/todos';
 
 
 class NewTodo extends Component {
-
   constructor(props) {
     super(props);
-    this.state = { text : '' }
+    this.state = { text: '' }
   }
 
   handleTextChange = (event) => {
-    const newText = event.currentTarget.value;
-    this.setState({ text: newText });
+    this.setState({ text: event.currentTarget.value });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if ( this.state.text !== '' ) {
-      this.props.dispatch(addTodo( this.state.text ));
-      this.setState({ text : '' });
+    if (this.state.text !== '') {
+      this.props.dispatch(addTodo(this.state.text));
+      this.setState({ text: '' });
     }
   }
-
 
   render() {
     return (
       <div className="NewTodo">
-      <form onSubmit= { this.handleSubmit }>
-        <input
-          type="text"
-          placeholder="ztond"
-          value={ this.state.text }
-          onChange={ this.handleTextChange } />
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            placeholder="ztond"
+            value={this.state.text}
+            onChange={this.handleTextChange}
+            autoFocus />
         </form>
       </div>
     )
