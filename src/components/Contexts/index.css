@@ -6,26 +6,43 @@
 
 .contexts button.context-button {
   margin-left: 10px;
+  margin-right: 10px;
   margin-top: 10px;
   padding: 6px 8px;
   font-size: 16px;
   font-weight: 500;
-  color: #69A6CE;
+  color: #69a6ce;
   text-decoration: none;
   background-color: #fbfbfb;
   cursor: default;
   border: 1px solid #ccc;
+  position: relative;
 }
 
-
 .contexts button.context-button.active {
-  border-color: #69A6CE;
-  background-color: #69A6CE;
   color: #fcfcfc;
+  background-color: #69a6ce;
+  border-color: #69a6ce;
+}
+
+.contexts button.context-button .count-badge {
+  position: absolute;
+  top: -13px;
+  right: -13px;
+  font-size: 12px;
+  color: #fcfcfc;
+  background: #69a6ce;
+  border: 1px solid #666;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  padding-top: 5px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .contexts button.edit-contexts.active {
-  color: #69A6CE;
+  color: #69a6ce;
 }
 
 .contexts .edit-contexts,
@@ -68,9 +85,6 @@
 .context button.remove-context {
   font-size: 130%;
 }
-
-
-
 
 /* popover to add new context */
 
@@ -134,10 +148,6 @@
 .add-context-popover input::placeholder {
   color: #ccc;
 }
-
-
-
-
 
 .edit-context-popover {
   position: absolute;

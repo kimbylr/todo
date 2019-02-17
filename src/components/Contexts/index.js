@@ -191,7 +191,8 @@ class Contexts extends Component {
                     : 'context-button'
                 }
               >
-                {`${context.label} (${context.count})`}
+                {context.label}
+                <span className="count-badge">{context.count}</span>
               </button>
 
               {this.state.showEditContexts && (
@@ -227,8 +228,7 @@ const mapStateToProps = state => {
   const contexts = Object.values(state.contexts)
     .sort(({ updatedAt: a }, { updatedAt: b }) => b - a)
     .map(({ id, label, todos }) => {
-      const count = Object.values(todos).filter(({ completed }) => !completed)
-        .length;
+      const count = todos.filter(({ completed }) => !completed).length;
       return { id, label, count };
     });
 
