@@ -6,7 +6,6 @@
 
 .contexts button.context-button {
   margin-left: 10px;
-  margin-right: 10px;
   margin-top: 10px;
   padding: 6px 8px;
   font-size: 16px;
@@ -26,20 +25,23 @@
 }
 
 .contexts button.context-button .count-badge {
-  position: absolute;
-  top: -13px;
-  right: -13px;
+  position: relative;
+  top: -1px;
+  padding: 4px 0 3px 8px;
+  margin-left: 10px;
   font-size: 12px;
-  color: #fcfcfc;
-  background: #69a6ce;
-  border: 1px solid #666;
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-  padding-top: 5px;
+  color: #69a6ce;
+  border-left: 1px solid #ccc;
+  height: calc(100% + 2px);
   box-sizing: border-box;
-  text-align: center;
 }
+
+.contexts button.context-button.active .count-badge {
+  border-left: 1px solid #fff;
+  color: #fcfcfc;
+}
+
+/* buttons on the right */
 
 .contexts button.edit-contexts.active {
   color: #69a6ce;
