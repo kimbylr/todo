@@ -1,6 +1,6 @@
-import { API_BASE_URL } from '../../resources/API_URL';
-
 import { PUSH_TODO, CHANGE_TODO, CHANGE_TODOS } from '../actions';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const pushTodo = (todo, activeContext) => ({
   type: PUSH_TODO,
