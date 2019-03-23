@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
-import { setPassphraseAndFetch } from './resources/setPassphraseAndFetch';
+import { setPassphraseAndFetch } from './helpers/setPassphraseAndFetch';
 import Contexts from './components/contexts';
 import Filter from './components/filter';
 import Header from './components/header';
@@ -29,11 +29,11 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: state.contexts,
-    filter: state.filter
-  }
+    filter: state.filter,
+  };
 };
 
 const ConnectedApp = connect(mapStateToProps)(App);
@@ -42,7 +42,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedApp />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 registerServiceWorker();

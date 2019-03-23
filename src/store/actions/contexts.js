@@ -1,4 +1,4 @@
-import { setPassphraseAndFetch } from '../../resources/setPassphraseAndFetch';
+import { setPassphraseAndFetch } from '../../helpers/setPassphraseAndFetch';
 import {
   SET_CONTEXTS,
   PUSH_CONTEXT,
