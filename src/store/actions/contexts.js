@@ -4,6 +4,7 @@ import {
   PUSH_CONTEXT,
   PUSH_NEW_CONTEXT_LABEL,
   REMOVE_CONTEXT,
+  setSubmitting,
 } from '../actions';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -23,6 +24,7 @@ export const fetchAllTodos = () => (dispatch, getState) => {
     },
   };
 
+  dispatch(setSubmitting(true));
   return fetch(url, params)
     .then(response => response.json())
     .then(todos => {
@@ -31,7 +33,8 @@ export const fetchAllTodos = () => (dispatch, getState) => {
         setPassphraseAndFetch(dispatch);
       } else dispatch(setContexts(todos));
     })
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const pushContext = context => ({
@@ -50,10 +53,12 @@ export const addContext = label => (dispatch, getState) => {
     body: JSON.stringify({ label }),
   };
 
+  dispatch(setSubmitting(true));
   fetch(url, params)
     .then(response => response.json())
     .then(context => dispatch(pushContext(context)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const pushNewContextLabel = context => ({
@@ -72,10 +77,12 @@ export const renameContext = (id, label) => (dispatch, getState) => {
     body: JSON.stringify({ label }),
   };
 
+  dispatch(setSubmitting(true));
   fetch(url, params)
     .then(response => response.json())
     .then(context => dispatch(pushNewContextLabel(context)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const removeContext = contextId => ({
@@ -93,8 +100,10 @@ export const archiveContext = id => (dispatch, getState) => {
     },
   };
 
+  dispatch(setSubmitting(true));
   fetch(url, params)
     .then(response => response.json())
     .then(contextId => dispatch(removeContext(contextId)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };

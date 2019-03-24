@@ -1,4 +1,9 @@
-import { PUSH_TODO, CHANGE_TODO, CHANGE_TODOS } from '../actions';
+import {
+  PUSH_TODO,
+  CHANGE_TODO,
+  CHANGE_TODOS,
+  setSubmitting,
+} from '../actions';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -20,10 +25,12 @@ export const addTodo = text => (dispatch, getState) => {
     body: JSON.stringify({ content: text }),
   };
 
+  dispatch(setSubmitting(true));
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(pushTodo(todo, activeContext)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const changeTodo = (todo, activeContext) => ({
@@ -44,10 +51,12 @@ export const triggerCompleted = todo => (dispatch, getState) => {
     body: JSON.stringify({ completed: !todo.completed }),
   };
 
+  dispatch(setSubmitting(true));
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const changeText = (todoId, content) => (dispatch, getState) => {
@@ -62,10 +71,12 @@ export const changeText = (todoId, content) => (dispatch, getState) => {
     body: JSON.stringify({ content }),
   };
 
+  dispatch(setSubmitting(true));
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
 
 export const changeTodos = (activeContext, todos) => ({
@@ -86,8 +97,10 @@ export const changeOrder = ids => (dispatch, getState) => {
     body: JSON.stringify(ids),
   };
 
+  dispatch(setSubmitting(true));
   return fetch(url, params)
     .then(response => response.json())
     .then(todos => dispatch(changeTodos(activeContext, todos)))
-    .catch(error => {});
+    .catch(error => console.log(error))
+    .finally(dispatch(setSubmitting(false)));
 };
