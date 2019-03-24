@@ -27,7 +27,7 @@ const ListItem = styled.li`
   padding: 8px 25px;
   color: #333;
   font-size: 20px;
-  background-color: #fbfbfb;
+  background-color: #f8f8f8;
   cursor: default;
 
   ${({ completed }) =>
