@@ -8,6 +8,8 @@ import activeContext from './reducers/active-context';
 import passphrase from './reducers/passphrase';
 import submitting from './reducers/submitting';
 
+console.log(submitting);
+
 const reducers = combineReducers({
   filter: filterReducer,
   contexts: contextReducer,

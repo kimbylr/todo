@@ -2,10 +2,19 @@ import {
   PUSH_TODO,
   CHANGE_TODO,
   CHANGE_TODOS,
-  setSubmitting,
+  SET_SUBMITTING_TRUE,
 } from '../actions';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const getParams = (method, passphrase, body) => ({
+  method, // 'POST' etc.
+  headers: {
+    'Content-type': 'application/json',
+    Authorization: passphrase,
+  },
+  body: JSON.stringify(body),
+});
 
 export const pushTodo = (todo, activeContext) => ({
   type: PUSH_TODO,
@@ -16,21 +25,13 @@ export const pushTodo = (todo, activeContext) => ({
 export const addTodo = text => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext;
-  const params = {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify({ content: text }),
-  };
+  const params = getParams('POST', getState().passphrase, { content: text });
 
-  dispatch(setSubmitting(true));
+  dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(pushTodo(todo, activeContext)))
-    .catch(error => console.log(error))
-    .finally(dispatch(setSubmitting(false)));
+    .catch(error => console.log(error));
 };
 
 export const changeTodo = (todo, activeContext) => ({
@@ -42,41 +43,27 @@ export const changeTodo = (todo, activeContext) => ({
 export const triggerCompleted = todo => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todo.id;
-  const params = {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify({ completed: !todo.completed }),
-  };
+  const params = getParams('PUT', getState().passphrase, {
+    completed: !todo.completed,
+  });
 
-  dispatch(setSubmitting(true));
+  dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => console.log(error))
-    .finally(dispatch(setSubmitting(false)));
+    .catch(error => console.log(error));
 };
 
 export const changeText = (todoId, content) => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todoId;
-  const params = {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify({ content }),
-  };
+  const params = getParams('PUT', getState().passphrase, { content });
 
-  dispatch(setSubmitting(true));
+  dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
     .then(response => response.json())
     .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => console.log(error))
-    .finally(dispatch(setSubmitting(false)));
+    .catch(error => console.log(error));
 };
 
 export const changeTodos = (activeContext, todos) => ({
@@ -88,19 +75,11 @@ export const changeTodos = (activeContext, todos) => ({
 export const changeOrder = ids => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/order/';
-  const params = {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify(ids),
-  };
+  const params = getParams('PUT', getState().passphrase, ids);
 
-  dispatch(setSubmitting(true));
+  dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
     .then(response => response.json())
     .then(todos => dispatch(changeTodos(activeContext, todos)))
-    .catch(error => console.log(error))
-    .finally(dispatch(setSubmitting(false)));
+    .catch(error => console.log(error));
 };
