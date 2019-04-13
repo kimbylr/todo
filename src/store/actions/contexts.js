@@ -4,9 +4,19 @@ import {
   PUSH_CONTEXT,
   PUSH_NEW_CONTEXT_LABEL,
   REMOVE_CONTEXT,
+  SET_SUBMITTING_TRUE,
 } from '../actions';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const getParams = (method, passphrase, body) => ({
+  method, // 'POST' etc.
+  headers: {
+    'Content-type': 'application/json',
+    Authorization: passphrase,
+  },
+  body: JSON.stringify(body),
+});
 
 export const setContexts = contexts => ({
   type: SET_CONTEXTS,
@@ -15,14 +25,9 @@ export const setContexts = contexts => ({
 
 export const fetchAllTodos = () => (dispatch, getState) => {
   const url = API_BASE_URL;
-  const params = {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-  };
+  const params = getParams('GET', getState().passphrase);
 
+  dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
     .then(response => response.json())
     .then(todos => {
@@ -31,7 +36,7 @@ export const fetchAllTodos = () => (dispatch, getState) => {
         setPassphraseAndFetch(dispatch);
       } else dispatch(setContexts(todos));
     })
-    .catch(error => {});
+    .catch(error => console.log(error));
 };
 
 export const pushContext = context => ({
@@ -41,19 +46,13 @@ export const pushContext = context => ({
 
 export const addContext = label => (dispatch, getState) => {
   const url = API_BASE_URL + 'context';
-  const params = {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify({ label }),
-  };
+  const params = getParams('POST', getState().passphrase, { label });
 
+  dispatch(SET_SUBMITTING_TRUE);
   fetch(url, params)
     .then(response => response.json())
     .then(context => dispatch(pushContext(context)))
-    .catch(error => {});
+    .catch(error => console.log(error));
 };
 
 export const pushNewContextLabel = context => ({
@@ -63,19 +62,13 @@ export const pushNewContextLabel = context => ({
 
 export const renameContext = (id, label) => (dispatch, getState) => {
   const url = API_BASE_URL + id;
-  const params = {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-    body: JSON.stringify({ label }),
-  };
+  const params = getParams('PUT', getState().passphrase, { label });
 
+  dispatch(SET_SUBMITTING_TRUE);
   fetch(url, params)
     .then(response => response.json())
     .then(context => dispatch(pushNewContextLabel(context)))
-    .catch(error => {});
+    .catch(error => console.log(error));
 };
 
 export const removeContext = contextId => ({
@@ -85,16 +78,11 @@ export const removeContext = contextId => ({
 
 export const archiveContext = id => (dispatch, getState) => {
   const url = API_BASE_URL + id;
-  const params = {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: getState().passphrase,
-    },
-  };
+  const params = getParams('DELETE', getState().passphrase);
 
+  dispatch(SET_SUBMITTING_TRUE);
   fetch(url, params)
     .then(response => response.json())
     .then(contextId => dispatch(removeContext(contextId)))
-    .catch(error => {});
+    .catch(error => console.log(error));
 };

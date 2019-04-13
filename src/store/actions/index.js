@@ -24,3 +24,6 @@ export const setPassphrase = passphrase => ({
   type: SET_PASSPHRASE,
   payload: passphrase,
 });
+
+/*** submitting ***/
+export const SET_SUBMITTING_TRUE = { type: 'setSubmitting' };
