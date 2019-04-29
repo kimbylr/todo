@@ -3,6 +3,7 @@ export const SET_CONTEXTS = 'setContexts';
 export const PUSH_CONTEXT = 'pushContext'; // also listened to by activeContext reducer
 export const PUSH_NEW_CONTEXT_LABEL = 'pushNewContextLabel';
 export const REMOVE_CONTEXT = 'removeContext'; // also listened to by activeContext reducer
+export const REORDER_TODOS_OPTIMISTIC = 'reorderTodosOptimistic';
 export const CHANGE_TODOS = 'changeTodos';
 
 /*** single todo ***/

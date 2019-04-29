@@ -5,6 +5,7 @@ import {
   REMOVE_CONTEXT,
   PUSH_TODO,
   CHANGE_TODO,
+  REORDER_TODOS_OPTIMISTIC,
   CHANGE_TODOS,
 } from '../actions';
 
@@ -61,6 +62,24 @@ const contexts = (state = {}, action) => {
       return {
         ...state,
         [activeContext]: { ...state[activeContext], todos },
+      };
+    }
+
+    case REORDER_TODOS_OPTIMISTIC: {
+      const currentContextId = action.activeContext;
+      const sorting = action.payload;
+      const todos = state[currentContextId].todos;
+
+      const reorderedTodos = sorting.map(id =>
+        todos.find(todo => todo.id === id),
+      );
+
+      return {
+        ...state,
+        [currentContextId]: {
+          ...state[currentContextId],
+          todos: reorderedTodos,
+        },
       };
     }
 

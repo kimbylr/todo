@@ -19,7 +19,6 @@ class TodoList extends React.Component {
     this.state = {
       todos: props.todos,
     };
-    this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -30,7 +29,7 @@ class TodoList extends React.Component {
     this.setState({ todos: this.props.todos });
   }
 
-  onDragEnd(result) {
+  onDragEnd = result => {
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -46,7 +45,7 @@ class TodoList extends React.Component {
 
     const ids = todos.map(({ id }) => id);
     this.props.dispatch(changeOrder(ids));
-  }
+  };
 
   render() {
     const { dispatch } = this.props;

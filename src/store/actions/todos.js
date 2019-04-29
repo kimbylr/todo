@@ -1,6 +1,7 @@
 import {
   PUSH_TODO,
   CHANGE_TODO,
+  REORDER_TODOS_OPTIMISTIC,
   CHANGE_TODOS,
   SET_SUBMITTING_TRUE,
 } from '../actions';
@@ -72,14 +73,28 @@ export const changeTodos = (activeContext, todos) => ({
   activeContext,
 });
 
+export const reorderTodosOptimistic = (activeContext, todoIds) => ({
+  type: REORDER_TODOS_OPTIMISTIC,
+  payload: todoIds,
+  activeContext,
+});
+
 export const changeOrder = ids => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/order/';
   const params = getParams('PUT', getState().passphrase, ids);
 
   dispatch(SET_SUBMITTING_TRUE);
+
+  // !! optimistic update !! -> will be overwritten
+  const todosBefore = getState().contexts[activeContext];
+  dispatch(reorderTodosOptimistic(activeContext, ids));
+
   return fetch(url, params)
     .then(response => response.json())
     .then(todos => dispatch(changeTodos(activeContext, todos)))
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      dispatch(changeTodos(activeContext, todosBefore));
+    });
 };
