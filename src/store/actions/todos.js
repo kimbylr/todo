@@ -23,8 +23,8 @@ export const pushTodo = (todo, activeContext) => ({
   activeContext,
 });
 
-export const addTodo = text => (dispatch, getState) => {
-  const activeContext = getState().activeContext;
+export const addTodo = (text, context) => (dispatch, getState) => {
+  const activeContext = context || getState().activeContext;
   const url = API_BASE_URL + activeContext;
   const params = getParams('POST', getState().passphrase, { content: text });
 

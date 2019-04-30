@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import styles from './styles';
 import './index.css';
 import { connect } from 'react-redux';
 import {
@@ -92,20 +94,25 @@ class Contexts extends Component {
   };
 
   render() {
+    const { activeContext } = this.props;
+
     return (
       <div className="contexts">
         <button
           className={
             this.state.showEditContexts
-              ? 'edit-contexts active'
-              : 'edit-contexts'
+              ? 'icon-button edit-contexts active'
+              : 'icon-button edit-contexts'
           }
           onClick={this.editContexts}
         >
           <span className="ion-edit" />
         </button>
 
-        <button className="add-context" onClick={this.showAddContextBox}>
+        <button
+          className="icon-button add-context"
+          onClick={this.showAddContextBox}
+        >
           <span className="ion-plus-circled" />
         </button>
 
@@ -179,46 +186,70 @@ class Contexts extends Component {
           </div>
         )}
 
-        {this.props.contexts.map((context, index) => {
-          return (
-            <span className="context" key={context.id}>
-              <button
+        {/* contexts */
+        this.props.contexts.map((context, index) => (
+          <span className="context" key={context.id}>
+            {context.id === activeContext ? (
+              <styles.ContextButton
                 id={context.id}
                 onClick={this.handleContextChange}
-                className={
-                  this.props.activeContext === context.id
-                    ? 'context-button active'
-                    : 'context-button'
-                }
+                active
               >
                 {context.label}
                 <span className="count-badge">{context.count}</span>
-              </button>
+              </styles.ContextButton>
+            ) : (
+              <Droppable
+                droppableId={`context-${context.id}`}
+                direction="vertical"
+              >
+                {(provided, { isDraggingOver }) => {
+                  return (
+                    <span
+                      className="context-button-container"
+                      ref={provided.innerRef}
+                    >
+                      <styles.ContextButton
+                        id={context.id}
+                        onClick={this.handleContextChange}
+                        isDraggingOver={isDraggingOver}
+                      >
+                        {context.label}
+                        <span className="count-badge">{context.count}</span>
+                      </styles.ContextButton>
 
-              {this.state.showEditContexts && (
-                <span>
-                  <button
-                    className="edit-context"
-                    onClick={() => this.showEditContextBox(context, index)}
-                    value={context.id}
-                  >
-                    <span className="ion-edit" />
-                  </button>
+                      <div id={`${context.id}-drop`} className="drop-target">
+                        {context.label}
+                        {provided.placeholder}
+                      </div>
+                    </span>
+                  );
+                }}
+              </Droppable>
+            )}
+            {this.state.showEditContexts && (
+              <span>
+                <button
+                  className="icon-button edit-context"
+                  onClick={() => this.showEditContextBox(context, index)}
+                  value={context.id}
+                >
+                  <span className="ion-edit" />
+                </button>
 
-                  <button
-                    className="remove-context"
-                    onClick={() => this.handleRemove(context)}
-                    value={context.id}
-                  >
-                    <span className="ion-ios-trash-outline" />
-                  </button>
+                <button
+                  className="icon-button remove-context"
+                  onClick={() => this.handleRemove(context)}
+                  value={context.id}
+                >
+                  <span className="ion-ios-trash-outline" />
+                </button>
 
-                  <br />
-                </span>
-              )}
-            </span>
-          );
-        })}
+                <br />
+              </span>
+            )}
+          </span>
+        ))}
       </div>
     );
   }
