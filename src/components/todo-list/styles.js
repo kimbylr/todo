@@ -36,7 +36,11 @@ const ListItem = styled.li`
           color: #ccc;`
       : ''}
 
-  ${({ isDragging }) => (isDragging ? 'box-shadow: 0 0 20px #666;;' : '')}
+  ${({ isDragging }) =>
+    isDragging
+      ? ` box-shadow: 0 0 20px #666;
+          opacity: 0.8;`
+      : ''}
 `;
 
 const Input = styled.input`

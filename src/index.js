@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
-import Contexts from './components/contexts';
 import Filter from './components/filter';
 import Header from './components/header';
 import NewTodo from './components/new-todo';
-import TodoList from './components/todo-list';
 import { Submitting } from './components/submitting';
+import DragDropArea from './compositions/drag-drop-area';
 import { setPassphraseAndFetch } from './helpers/setPassphraseAndFetch';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -23,8 +22,7 @@ class App extends React.Component {
         <Submitting active={this.props.submitting} />
         <Header />
         <NewTodo />
-        <Contexts />
-        <TodoList />
+        <DragDropArea />
         <Filter />
       </React.Fragment>
     );
