@@ -11,9 +11,12 @@ const ContextButton = styled.button`
   position: relative;
   color: ${({ active }) => (active ? '#fcfcfc' : '#69a6ce')};
   background-color: ${({ active }) => (active ? '#69a6ce' : '#fcfcfc')};
-  border: 1px solid
-    ${({ active, isDraggingOver }) =>
-      isDraggingOver ? 'red' : active ? '#69a6ce' : '#ccc'};
+  border: ${({ active, isDraggingOver }) =>
+    isDraggingOver
+      ? '2px dashed red; padding: 5px 7px'
+      : active
+      ? '1px solid #69a6ce'
+      : '1px solid #ccc'};
 
   & .count-badge {
     position: relative;
