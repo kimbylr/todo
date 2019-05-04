@@ -1,272 +1,215 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import styles from './styles';
-import './index.css';
 import { connect } from 'react-redux';
+import styles from './styles';
 import {
   addContext,
   renameContext,
   archiveContext,
 } from '../../store/actions/contexts';
+import Overlay from '../../blueprints/overlay';
 
-class Contexts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showAddContext: false,
-      showEditContexts: false,
-      showEditContext: false,
-      newContext: '',
-      editContextIndex: 0,
-      editContextId: '',
-      contextInitialContent: '',
-    };
-  }
+const Contexts = ({ contexts, activeContext, dispatch }) => {
+  const [showAddContext, setShowAddContext] = useState(false);
+  const [showEditContexts, setShowEditContexts] = useState(false);
+  const [showEditContext, setShowEditContext] = useState(false);
 
-  /*** another context is selected ***/
-  handleContextChange = event => {
-    this.props.dispatch({
+  const [contextId, setContextId] = useState('');
+  const [contextLabel, setContextLabel] = useState('');
+  const [initialContextLabel, setInitialContextLabel] = useState('');
+
+  /* select another context */
+  const handleContextChange = event => {
+    dispatch({
       type: 'changeContext',
       contextId: event.currentTarget.id,
     });
   };
 
-  /* edit is clicked -> change to showEditContexts view */
-  editContexts = () => {
-    this.setState({ showEditContexts: !this.state.showEditContexts });
+  /* start renaming context */
+  const showEditContextDialogue = (context, index) => {
+    setShowEditContext(true);
+    setContextId(context.id);
+    setContextLabel(context.label);
+    setInitialContextLabel(context.label);
   };
 
-  /* context rename */
-  showEditContextBox = (context, index) => {
-    this.setState({
-      showEditContext: true,
-      editContextIndex: index,
-      editContextId: context.id,
-      contextInitialContent: context.label,
-    });
-  };
-
-  hideEditContextBox = () => {
-    this.setState({ showEditContext: false });
-  };
-
-  handleEdit = event => {
+  /* rename context */
+  const handleEdit = event => {
     event.preventDefault();
-    const {
-      editContextId: id,
-      contextInitialContent: initialText,
-    } = this.state;
-    const text = this.input.value;
-    if (text && text !== initialText) {
-      this.props.dispatch(renameContext(id, text));
+
+    if (contextLabel && contextLabel !== initialContextLabel) {
+      dispatch(renameContext(contextId, contextLabel));
     }
-    this.setState({ showEditContext: false, showEditContexts: false });
+
+    setContextLabel('');
+    setShowEditContext(false);
+    setShowEditContexts(false);
   };
 
-  /* context remove */
-  handleRemove = context => {
-    const { id, label } = context;
+  /* remove context */
+  const handleRemove = ({ id, label }) => {
     if (window.confirm(`Archive "${label}"?`)) {
-      this.props.dispatch(archiveContext(id));
-      this.setState({ showEditContexts: false });
+      dispatch(archiveContext(id));
+      setShowEditContexts(false);
     }
   };
 
-  /*** add new context ***/
-  showAddContextBox = () => {
-    this.setState({ showAddContext: true });
-  };
-
-  hideAddContextBox = () => {
-    this.setState({ showAddContext: false });
-  };
-
-  handleAddTextChange = event => {
-    this.setState({ newContext: event.currentTarget.value });
-  };
-
-  handleAdd = event => {
+  /* add context */
+  const handleAdd = event => {
     event.preventDefault();
-    if (this.state.newContext !== '') {
-      this.props.dispatch(addContext(this.state.newContext));
-      this.setState({ newContext: '', showAddContext: false });
+
+    if (contextLabel) {
+      dispatch(addContext(contextLabel));
+      setContextLabel('');
+      setShowAddContext(false);
     }
   };
 
-  render() {
-    const { activeContext } = this.props;
+  const selectAll = event => event.target.select();
 
-    return (
-      <div className="contexts">
-        <button
-          className={
-            this.state.showEditContexts
-              ? 'icon-button edit-contexts active'
-              : 'icon-button edit-contexts'
-          }
-          onClick={this.editContexts}
+  return (
+    <>
+      <styles.Container>
+        <styles.MainIconButton
+          active={showEditContexts}
+          onClick={() => setShowEditContexts(!showEditContexts)}
         >
           <span className="ion-edit" />
-        </button>
+        </styles.MainIconButton>
 
-        <button
-          className="icon-button add-context"
-          onClick={this.showAddContextBox}
-        >
+        <styles.MainIconButton onClick={() => setShowAddContext(true)}>
           <span className="ion-plus-circled" />
-        </button>
+        </styles.MainIconButton>
 
-        {/* new context popover */
-        this.state.showAddContext && (
-          <span>
-            <div
-              className={
-                this.state.showAddContext
-                  ? 'popover-dark active'
-                  : 'popover-dark'
-              }
-              onClick={this.hideAddContextBox}
-            />
-            <div
-              className={
-                this.state.showAddContext
-                  ? 'add-context-popover active'
-                  : 'add-context-popover'
-              }
-            >
-              <form onSubmit={this.handleAdd}>
-                <input
-                  type="text"
-                  placeholder="new context"
-                  value={this.state.newContext}
-                  onChange={this.handleAddTextChange}
-                  autoFocus
-                />
-              </form>
-            </div>
-          </span>
-        )}
-
-        {/* edit context popover */
-        this.state.showEditContext && (
-          <div
-            style={{
-              position: 'relative',
-              top: this.state.editContextIndex * 43 + 'px',
-            }}
-          >
-            <div
-              className={
-                this.state.showEditContext
-                  ? 'popover-dark active'
-                  : 'popover-dark'
-              }
-              onClick={this.hideEditContextBox}
-            />
-            <div
-              className={
-                this.state.showEditContext
-                  ? 'edit-context-popover active'
-                  : 'edit-context-popover'
-              }
-            >
-              <form onSubmit={this.handleEdit}>
-                <input
-                  type="text"
-                  placeholder={this.state.contextInitialContent}
-                  defaultValue={this.state.contextInitialContent}
-                  ref={input => {
-                    this.input = input;
-                    input && input.select();
-                  }}
-                  autoFocus
-                />
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* contexts */
-        this.props.contexts.map((context, index) => (
+        {contexts.map((context, index) => (
           <span className="context" key={context.id}>
             {context.id === activeContext ? (
               <styles.ContextButton
                 id={context.id}
-                onClick={this.handleContextChange}
+                onClick={handleContextChange}
                 active
               >
                 {context.label}
-                <span className="count-badge">{context.count}</span>
+                <styles.ContextButtonCountBadge active>
+                  {context.count}
+                </styles.ContextButtonCountBadge>
               </styles.ContextButton>
             ) : (
               <Droppable
                 droppableId={`context-${context.id}`}
                 direction="vertical"
               >
-                {(provided, { isDraggingOver }) => {
-                  return (
-                    <span
-                      className="context-button-container"
-                      ref={provided.innerRef}
+                {(provided, { isDraggingOver }) => (
+                  <span
+                    style={{ position: 'relative' }}
+                    ref={provided.innerRef}
+                  >
+                    <styles.ContextButton
+                      id={context.id}
+                      onClick={handleContextChange}
+                      isDraggingOver={isDraggingOver}
                     >
-                      <styles.ContextButton
-                        id={context.id}
-                        onClick={this.handleContextChange}
-                        isDraggingOver={isDraggingOver}
-                      >
-                        {context.label}
-                        <span className="count-badge">{context.count}</span>
-                      </styles.ContextButton>
+                      {context.label}
+                      <styles.ContextButtonCountBadge>
+                        {context.count}
+                      </styles.ContextButtonCountBadge>
+                    </styles.ContextButton>
 
-                      <div id={`${context.id}-drop`} className="drop-target">
-                        {context.label}
-                        {provided.placeholder}
-                      </div>
-                    </span>
-                  );
-                }}
+                    <styles.DropTarget id={`${context.id}-drop`}>
+                      {context.label}
+                      {provided.placeholder}
+                    </styles.DropTarget>
+                  </span>
+                )}
               </Droppable>
             )}
-            {this.state.showEditContexts && (
+
+            {showEditContexts && (
               <span>
-                <button
-                  className="icon-button edit-context"
-                  onClick={() => this.showEditContextBox(context, index)}
+                <styles.ContextListIconButton
+                  onClick={() => showEditContextDialogue(context, index)}
                   value={context.id}
                 >
                   <span className="ion-edit" />
-                </button>
+                </styles.ContextListIconButton>
 
-                <button
-                  className="icon-button remove-context"
-                  onClick={() => this.handleRemove(context)}
+                <styles.ContextListIconButton
+                  onClick={() => handleRemove(context)}
                   value={context.id}
                 >
                   <span className="ion-ios-trash-outline" />
-                </button>
+                </styles.ContextListIconButton>
 
                 <br />
               </span>
             )}
           </span>
         ))}
-      </div>
-    );
-  }
-}
+      </styles.Container>
 
-const mapStateToProps = state => {
-  const contexts = Object.values(state.contexts)
+      {/* new context overlay */
+      showAddContext && (
+        <Overlay
+          clickOffsideFn={() => {
+            setShowAddContext(false);
+            setContextLabel('');
+          }}
+        >
+          <styles.Form onSubmit={handleAdd}>
+            <styles.FormIcon>
+              <span className="ion-plus-circled" />
+            </styles.FormIcon>
+            <styles.FormInput
+              type="text"
+              placeholder="new context"
+              value={contextLabel}
+              onChange={({ currentTarget: { value } }) =>
+                setContextLabel(value)
+              }
+              autoFocus
+            />
+          </styles.Form>
+        </Overlay>
+      )}
+
+      {/* edit context overlay */
+      showEditContext && (
+        <Overlay
+          clickOffsideFn={() => {
+            setShowEditContext(false);
+            setContextLabel('');
+          }}
+        >
+          <styles.Form onSubmit={handleEdit}>
+            <styles.FormIcon>
+              <span className="ion-edit" />
+            </styles.FormIcon>
+            <styles.FormInput
+              type="text"
+              placeholder={initialContextLabel}
+              value={contextLabel}
+              onChange={({ currentTarget: { value } }) =>
+                setContextLabel(value)
+              }
+              autoFocus
+              onFocus={selectAll}
+            />
+          </styles.Form>
+        </Overlay>
+      )}
+    </>
+  );
+};
+
+const mapStateToProps = state => ({
+  activeContext: state.activeContext,
+  contexts: Object.values(state.contexts)
     .sort(({ updatedAt: a }, { updatedAt: b }) => b - a)
     .map(({ id, label, todos }) => {
       const count = todos.filter(({ completed }) => !completed).length;
       return { id, label, count };
-    });
-
-  return {
-    activeContext: state.activeContext,
-    contexts,
-  };
-};
+    }),
+});
 
 export default connect(mapStateToProps)(Contexts);

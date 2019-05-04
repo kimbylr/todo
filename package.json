@@ -1,6 +1,7 @@
 {
   "name": "ztond",
   "version": "0.1.0",
+  "homepage": "/ztond/",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",

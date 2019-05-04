@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const TodosContainer = styled.div`
   margin: 0 0 30px;
+  user-select: none;
 `;
 
 const AllCompleted = styled.div`
