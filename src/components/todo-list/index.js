@@ -4,13 +4,23 @@ import styles from './styles';
 import Todo from './todo';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
-const TodoList = ({ dispatch, todos }) => (
-  <styles.TodosContainer>
-    {!todos.length ? (
-      <styles.AllCompleted>
-        <span className="ion-ios-checkmark-outline" />
-      </styles.AllCompleted>
-    ) : (
+const TodoList = ({ dispatch, todos }) => {
+  if (!todos) {
+    return null;
+  }
+
+  if (!todos.length) {
+    return (
+      <styles.TodosContainer>
+        <styles.AllCompleted>
+          <i className="ion-ios-checkmark-circle-outline" />
+        </styles.AllCompleted>
+      </styles.TodosContainer>
+    );
+  }
+
+  return (
+    <styles.TodosContainer>
       <Droppable droppableId="todo-list">
         {provided => (
           <styles.List ref={provided.innerRef}>
@@ -30,9 +40,9 @@ const TodoList = ({ dispatch, todos }) => (
           </styles.List>
         )}
       </Droppable>
-    )}
-  </styles.TodosContainer>
-);
+    </styles.TodosContainer>
+  );
+};
 
 const mapStateToProps = state => {
   const {
@@ -42,7 +52,7 @@ const mapStateToProps = state => {
   } = state;
 
   if (!activeContext) {
-    return { todos: [] };
+    return { todos: null };
   }
 
   const todos = contexts[activeContext].todos || [];

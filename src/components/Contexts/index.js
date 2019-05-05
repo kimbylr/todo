@@ -75,11 +75,11 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
           active={showEditContexts}
           onClick={() => setShowEditContexts(!showEditContexts)}
         >
-          <span className="ion-edit" />
+          <i className="ion-md-create" />
         </styles.MainIconButton>
 
         <styles.MainIconButton onClick={() => setShowAddContext(true)}>
-          <span className="ion-plus-circled" />
+          <i className="ion-md-add-circle" />
         </styles.MainIconButton>
 
         {contexts.map((context, index) => (
@@ -131,14 +131,14 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
                   onClick={() => showEditContextDialogue(context, index)}
                   value={context.id}
                 >
-                  <span className="ion-edit" />
+                  <i className="ion-md-create" />
                 </styles.ContextListIconButton>
 
                 <styles.ContextListIconButton
                   onClick={() => handleRemove(context)}
                   value={context.id}
                 >
-                  <span className="ion-ios-trash-outline" />
+                  <i className="ion-ios-trash" />
                 </styles.ContextListIconButton>
 
                 <br />
@@ -158,7 +158,7 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
         >
           <styles.Form onSubmit={handleAdd}>
             <styles.FormIcon>
-              <span className="ion-plus-circled" />
+              <i className="ion-md-add-circle" />
             </styles.FormIcon>
             <styles.FormInput
               type="text"
@@ -183,7 +183,7 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
         >
           <styles.Form onSubmit={handleEdit}>
             <styles.FormIcon>
-              <span className="ion-edit" />
+              <i className="ion-md-create" />
             </styles.FormIcon>
             <styles.FormInput
               type="text"

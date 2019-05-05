@@ -24,6 +24,10 @@ const ContextButton = styled.button`
       : active
       ? '1px solid #69a6ce'
       : '1px solid #ccc'};
+
+  &:focus {
+    box-shadow: 0 0 5px #69a6ce;
+  }
 `;
 
 const ContextButtonCountBadge = styled.span`
@@ -60,6 +64,16 @@ const IconButton = styled.button`
 
   &:hover {
     color: #555;
+  }
+
+  & span {
+    display: inline-block;
+    width: 23px;
+  }
+
+  &:focus span {
+    border-radius: 50%;
+    color: #69a6ce;
   }
 
   ${({ active }) => (active ? 'color: #69a6ce;' : '')}

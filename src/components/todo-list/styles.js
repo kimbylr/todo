@@ -59,13 +59,14 @@ const ButtonArea = styled.div`
   top: -20px;
 `;
 
-const IconButton = styled.span`
-  padding: 3px 0 3px 3px;
+const IconButton = styled.i`
+  padding: 3px 0;
+
   margin-left: 12px;
   &:hover {
     color: #555;
   }
-  ${({ editing }) => (editing ? 'color: #69a6ce;' : 'cursor: pointer;')}
+  ${({ active }) => (active ? 'color: #69a6ce;' : 'cursor: pointer;')}
 `;
 
 export default {

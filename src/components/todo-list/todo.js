@@ -16,8 +16,8 @@ class Todo extends Component {
     dispatch(triggerCompleted(todo));
   };
 
-  editTodo = () => {
-    this.setState({ editing: true });
+  toggleEditing = () => {
+    this.setState({ editing: !this.state.editing });
   };
 
   handleEdit = event => {
@@ -34,6 +34,7 @@ class Todo extends Component {
     const {
       completed,
       content,
+      link,
       dragRelatedProps: { innerRef, dragHandleProps, draggableProps },
       isDragging,
     } = this.props;
@@ -54,6 +55,7 @@ class Todo extends Component {
               placeholder={content}
               defaultValue={content}
               autoFocus
+              onBlur={this.toggleEditing}
               className="editing "
               ref={input => {
                 this.input = input;
@@ -65,10 +67,17 @@ class Todo extends Component {
           <div onClick={this.toggleCompleteTodo}>{content}</div>
         )}
         <styles.ButtonArea>
+          {(link || editing) && (
+            <styles.IconButton
+              className="ion-ios-link"
+              active={link}
+              onClick={this.toggleEditing}
+            />
+          )}
           <styles.IconButton
-            className="ion-edit"
-            editing={editing}
-            onClick={this.editTodo}
+            className="ion-md-create"
+            active={editing}
+            onClick={this.toggleEditing}
           />
         </styles.ButtonArea>
       </styles.ListItem>
