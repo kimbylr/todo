@@ -11,10 +11,10 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: calc(100% - 21px);
+  width: calc(100% - 45px);
   height: 40px;
   font-size: 24px;
-  padding: 0 10px;
+  padding: 0 36px 0 10px;
   border: 0px;
   margin-top: 10px;
   border: 1px solid #ccc;
@@ -32,6 +32,7 @@ const LinkButton = styled.button`
   position: absolute;
   padding: 2px;
   color: ${({ active }) => (active ? '#69a6ce' : '#999')};
+  background: transparent;
   top: 20px;
   right: 10px;
   cursor: pointer;

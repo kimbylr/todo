@@ -16,6 +16,7 @@ const Button = styled.button`
   color: #ccc;
   border: none;
   cursor: pointer;
+  background: transparent;
   ${({ active }) => (active ? 'color: #69a6ce;' : '')}
   &:hover {
     color: ${({ active }) => (active ? '#69a6ce;' : '#999')};
