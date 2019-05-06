@@ -55,12 +55,11 @@ const Input = styled.input`
 `;
 
 const ButtonArea = styled.div`
-  display: inline;
   float: right;
   color: #999;
   font-size: 16px;
   position: relative;
-  top: -20px;
+  top: 2px;
 `;
 
 const IconButton = styled.i`

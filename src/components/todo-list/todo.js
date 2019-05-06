@@ -51,21 +51,6 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
       {...dragHandleProps}
       isDragging={isDragging}
     >
-      {editing ? (
-        <form onSubmit={handleEdit}>
-          <styles.Input
-            type="text"
-            placeholder={initialContent}
-            value={content}
-            onChange={({ currentTarget: { value } }) => setContent(value)}
-            autoFocus
-            onBlur={() => setEditing(editLink)}
-            onFocus={selectAll}
-          />
-        </form>
-      ) : (
-        <div onClick={() => dispatch(triggerCompleted(todo))}>{content}</div>
-      )}
       <styles.ButtonArea>
         {editing && (
           <styles.IconButton
@@ -85,6 +70,21 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
           onClick={() => (editing ? endEditing() : setEditing(true))}
         />
       </styles.ButtonArea>
+      {editing ? (
+        <form onSubmit={handleEdit}>
+          <styles.Input
+            type="text"
+            placeholder={initialContent}
+            value={content}
+            onChange={({ currentTarget: { value } }) => setContent(value)}
+            autoFocus
+            onBlur={() => setEditing(editLink)}
+            onFocus={selectAll}
+          />
+        </form>
+      ) : (
+        <div onClick={() => dispatch(triggerCompleted(todo))}>{content}</div>
+      )}
 
       {/* edit link overlay */
       editLink && (
