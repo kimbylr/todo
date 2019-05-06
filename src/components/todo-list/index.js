@@ -28,10 +28,10 @@ const TodoList = ({ dispatch, todos }) => {
               <Draggable key={todo.id} draggableId={todo.id} index={index}>
                 {(provided, { isDragging }) => (
                   <Todo
+                    todo={todo}
                     dispatch={dispatch}
                     dragRelatedProps={provided}
                     isDragging={isDragging}
-                    {...todo}
                   />
                 )}
               </Draggable>

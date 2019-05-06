@@ -4,7 +4,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import {
   changeOrder,
   triggerCompleted,
-  changeText,
+  changeContent,
   addTodo,
 } from '../../store/actions/todos';
 
@@ -55,13 +55,14 @@ class DragDropArea extends React.Component {
     const { dispatch } = this.props;
 
     // 1. add to other context
-    await dispatch(addTodo(todo.content, contextToMoveTo));
+    const { content } = todo;
+    await dispatch(addTodo({ content }, contextToMoveTo));
 
     // 2. check off + add note
     if (!todo.completed) {
       await dispatch(triggerCompleted(todo));
     }
-    dispatch(changeText(todo.id, `${NOTICE_MOVED}${todo.content}`));
+    dispatch(changeContent(todo.id, `${NOTICE_MOVED}${todo.content}`));
   };
 
   render() {

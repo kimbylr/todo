@@ -23,10 +23,10 @@ export const pushTodo = (todo, activeContext) => ({
   activeContext,
 });
 
-export const addTodo = (text, context) => (dispatch, getState) => {
+export const addTodo = ({ content, link }, context) => (dispatch, getState) => {
   const activeContext = context || getState().activeContext;
   const url = API_BASE_URL + activeContext;
-  const params = getParams('POST', getState().passphrase, { content: text });
+  const params = getParams('POST', getState().passphrase, { content, link });
 
   dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
@@ -55,10 +55,13 @@ export const triggerCompleted = todo => (dispatch, getState) => {
     .catch(error => console.log(error));
 };
 
-export const changeText = (todoId, content) => (dispatch, getState) => {
+export const changeContent = (todoId, content, link) => (
+  dispatch,
+  getState,
+) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todoId;
-  const params = getParams('PUT', getState().passphrase, { content });
+  const params = getParams('PUT', getState().passphrase, { content, link });
 
   dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)

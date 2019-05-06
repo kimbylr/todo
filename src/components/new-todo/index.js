@@ -1,60 +1,78 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addTodo } from '../../store/actions/todos';
+import Overlay from '../../blueprints/overlay';
+import styles from './styles';
 
-const Container = styled.div`
-  background-color: #d2e4f0;
-  height: 60px;
-  padding: 24px;
-`;
-
-const Input = styled.input`
-  width: calc(100% - 21px);
-  height: 40px;
-  font-size: 24px;
-  padding: 0 10px;
-  border: 0px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  font-weight: 400;
-  color: #444;
-  -webkit-appearance: none;
-  border-radius: 0;
-
-  &::placeholder {
-    color: #ccc;
-  }
-`;
+const LINK_DEFAULT = 'https://';
 
 const NewTodo = ({ dispatch }) => {
-  const [text, setText] = useState('');
-
-  const handleTextChange = event => {
-    setText(event.currentTarget.value);
-  };
+  const [content, setContent] = useState('');
+  const [showLink, setShowLink] = useState(false);
+  const [link, setLink] = useState(LINK_DEFAULT);
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    if (text) {
-      dispatch(addTodo(text));
-      setText('');
+    if (content) {
+      const parsedLink = link === LINK_DEFAULT ? undefined : link;
+      dispatch(addTodo({ content, link: parsedLink }));
+      setContent('');
+      setLink(LINK_DEFAULT);
+    }
+  };
+
+  const evaluateLink = event => {
+    event.preventDefault();
+    setShowLink(false);
+    if (!link) {
+      setLink(LINK_DEFAULT);
     }
   };
 
   return (
-    <Container>
-      <form onSubmit={handleSubmit}>
-        <Input
+    <styles.Container>
+      <styles.Form onSubmit={handleSubmit}>
+        <styles.Input
           type="text"
           placeholder="ztond"
-          value={text}
-          onChange={handleTextChange}
+          value={content}
+          onChange={({ currentTarget: { value } }) => setContent(value)}
           autoFocus
         />
-      </form>
-    </Container>
+        <styles.LinkButton
+          active={link !== LINK_DEFAULT}
+          type="button"
+          onClick={() => setShowLink(true)}
+          title={link !== LINK_DEFAULT ? link : 'add link'}
+        >
+          <i className="ion-ios-link" />
+        </styles.LinkButton>
+      </styles.Form>
+
+      {/* edit link overlay */
+      showLink && (
+        <Overlay
+          clickOffsideFn={() => {
+            setLink(LINK_DEFAULT);
+            setShowLink(false);
+          }}
+        >
+          <styles.Overlay onSubmit={evaluateLink}>
+            <styles.OverlayIcon>
+              <i className="ion-ios-link" />
+            </styles.OverlayIcon>
+            <styles.OverlayInput
+              type="text"
+              placeholder={LINK_DEFAULT}
+              value={link}
+              onChange={({ currentTarget: { value } }) => setLink(value)}
+              autoFocus
+            />
+          </styles.Overlay>
+        </Overlay>
+      )}
+    </styles.Container>
   );
 };
 
