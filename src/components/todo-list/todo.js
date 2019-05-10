@@ -3,23 +3,20 @@ import { changeContent, triggerCompleted } from '../../store/actions/todos';
 import Overlay from '../../blueprints/overlay';
 import styles from './styles';
 
-const LINK_DEFAULT = 'https://';
-
 const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(todo.content);
   const [editLink, setEditLink] = useState(false);
-  const [link, setLink] = useState(todo.link || LINK_DEFAULT);
+  const [link, setLink] = useState(todo.link || '');
 
   useEffect(() => {
-    setLink(todo.link || LINK_DEFAULT);
+    setLink(todo.link || '');
   }, [todo.link]);
 
   const handleEdit = event => {
     event && event.preventDefault();
     if (content.trim() || link !== todo.link) {
-      const linkOrNull = link === LINK_DEFAULT || link === '' ? null : link;
-      dispatch(changeContent(id, content, linkOrNull));
+      dispatch(changeContent(id, content, link || null));
     }
     setEditing(false);
   };
@@ -55,7 +52,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
         {editing && (
           <styles.IconButton
             className="ion-ios-link"
-            active={link !== LINK_DEFAULT}
+            active={!!link}
             onClick={() => setEditLink(true)}
           />
         )}
@@ -90,7 +87,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
       editLink && (
         <Overlay
           clickOffsideFn={() => {
-            setLink(initialLink || LINK_DEFAULT);
+            setLink(initialLink || '');
             setEditLink(false);
           }}
         >
@@ -100,7 +97,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
             </styles.OverlayIcon>
             <styles.OverlayInput
               type="text"
-              placeholder={LINK_DEFAULT}
+              placeholder="https://..."
               value={link || ''}
               onChange={({ currentTarget: { value } }) => setLink(value)}
               autoFocus

@@ -4,29 +4,18 @@ import { addTodo } from '../../store/actions/todos';
 import Overlay from '../../blueprints/overlay';
 import styles from './styles';
 
-const LINK_DEFAULT = 'https://';
-
 const NewTodo = ({ dispatch }) => {
   const [content, setContent] = useState('');
   const [showLink, setShowLink] = useState(false);
-  const [link, setLink] = useState(LINK_DEFAULT);
+  const [link, setLink] = useState('');
 
   const handleSubmit = event => {
     event.preventDefault();
 
     if (content) {
-      const parsedLink = link === LINK_DEFAULT ? undefined : link;
-      dispatch(addTodo({ content, link: parsedLink }));
+      dispatch(addTodo({ content, link: link || undefined }));
       setContent('');
-      setLink(LINK_DEFAULT);
-    }
-  };
-
-  const evaluateLink = event => {
-    event.preventDefault();
-    setShowLink(false);
-    if (!link) {
-      setLink(LINK_DEFAULT);
+      setLink('');
     }
   };
 
@@ -41,10 +30,10 @@ const NewTodo = ({ dispatch }) => {
           autoFocus
         />
         <styles.LinkButton
-          active={link !== LINK_DEFAULT}
+          active={!!link}
           type="button"
           onClick={() => setShowLink(true)}
-          title={link !== LINK_DEFAULT ? link : 'add link'}
+          title={link || 'add link'}
         >
           <i className="ion-ios-link" />
         </styles.LinkButton>
@@ -54,17 +43,22 @@ const NewTodo = ({ dispatch }) => {
       showLink && (
         <Overlay
           clickOffsideFn={() => {
-            setLink(LINK_DEFAULT);
+            setLink('');
             setShowLink(false);
           }}
         >
-          <styles.Overlay onSubmit={evaluateLink}>
+          <styles.Overlay
+            onSubmit={event => {
+              event.preventDefault();
+              setShowLink(false);
+            }}
+          >
             <styles.OverlayIcon>
               <i className="ion-ios-link" />
             </styles.OverlayIcon>
             <styles.OverlayInput
               type="text"
-              placeholder={LINK_DEFAULT}
+              placeholder="https://..."
               value={link}
               onChange={({ currentTarget: { value } }) => setLink(value)}
               autoFocus
