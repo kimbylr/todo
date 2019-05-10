@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Overlay from '../../blueprints/overlay';
 import { changeContent, triggerCompleted } from '../../store/actions/todos';
 import styles from './styles';
+import { selectAllText } from '../../helpers/selectAllText';
 
 const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
   const [editing, setEditing] = useState(false);
@@ -34,8 +35,6 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
     }
     handleEdit();
   };
-
-  const selectAll = event => event.target.select();
 
   const { content: initialContent, link: initialLink, id, completed } = todo;
   const { innerRef, dragHandleProps, draggableProps } = dragRelatedProps;
@@ -76,7 +75,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
             onChange={({ currentTarget: { value } }) => setContent(value)}
             autoFocus
             onBlur={() => setEditing(editLink)}
-            onFocus={selectAll}
+            onFocus={selectAllText}
           />
         </form>
       ) : (
@@ -101,6 +100,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
               value={link || ''}
               onChange={({ currentTarget: { value } }) => setLink(value)}
               autoFocus
+              onFocus={selectAllText}
             />
           </styles.Overlay>
         </Overlay>

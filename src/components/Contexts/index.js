@@ -8,6 +8,7 @@ import {
   archiveContext,
 } from '../../store/actions/contexts';
 import Overlay from '../../blueprints/overlay';
+import { selectAllText } from '../../helpers/selectAllText';
 
 const Contexts = ({ contexts, activeContext, dispatch }) => {
   const [showAddContext, setShowAddContext] = useState(false);
@@ -65,8 +66,6 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
       setShowAddContext(false);
     }
   };
-
-  const selectAll = event => event.target.select();
 
   return (
     <>
@@ -193,7 +192,7 @@ const Contexts = ({ contexts, activeContext, dispatch }) => {
                 setContextLabel(value)
               }
               autoFocus
-              onFocus={selectAll}
+              onFocus={selectAllText}
             />
           </styles.Form>
         </Overlay>
