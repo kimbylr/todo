@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { changeContent, triggerCompleted } from '../../store/actions/todos';
+import React, { useEffect, useState } from 'react';
 import Overlay from '../../blueprints/overlay';
+import { changeContent, triggerCompleted } from '../../store/actions/todos';
 import styles from './styles';
 
 const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
@@ -41,7 +41,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
   const { innerRef, dragHandleProps, draggableProps } = dragRelatedProps;
 
   return (
-    <styles.ListItem
+    <styles.Todo
       completed={completed}
       ref={innerRef}
       {...draggableProps}
@@ -105,7 +105,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
           </styles.Overlay>
         </Overlay>
       )}
-    </styles.ListItem>
+    </styles.Todo>
   );
 };
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './styles';
-import Todo from './todo';
+import Todo from '../../components/todo';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
-const TodoList = ({ dispatch, todos }) => {
+const Todos = ({ dispatch, todos }) => {
   if (!todos) {
     return null;
   }
@@ -65,4 +65,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(TodoList);
+export default connect(mapStateToProps)(Todos);

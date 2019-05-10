@@ -9,7 +9,7 @@ import {
 } from '../../store/actions/todos';
 
 import Contexts from '../../components/contexts';
-import TodoList from '../../components/todo-list';
+import Todos from '../todos';
 
 const TODO_LIST = 'todo-list';
 const CONTEXT_PREFIX = 'context-';
@@ -69,7 +69,7 @@ class DragDropArea extends React.Component {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Contexts />
-        <TodoList />
+        <Todos />
       </DragDropContext>
     );
   }
