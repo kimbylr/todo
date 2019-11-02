@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import Filter from './components/filter';
@@ -10,24 +10,53 @@ import { setPassphraseAndFetch } from './helpers/setPassphraseAndFetch';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
+import { fetchAllTodos } from './store/actions/contexts';
 
-class App extends React.Component {
-  componentDidMount() {
-    setPassphraseAndFetch(this.props.dispatch);
-  }
+const WS_URL = process.env.REACT_APP_WS_URL;
 
-  render() {
-    return (
-      <React.Fragment>
-        <Submitting active={this.props.submitting} />
-        <Header />
-        <NewTodo />
-        <DragDropArea />
-        <Filter />
-      </React.Fragment>
-    );
-  }
-}
+const App = ({ submitting, dispatch }) => {
+  useEffect(() => {
+    setPassphraseAndFetch(dispatch);
+  }, [dispatch]);
+
+  // block refreshing (move todo) - super hack
+  const [doRefresh, setDoRefresh] = useState(true);
+  const disableRefresh = () => setDoRefresh(false);
+  useEffect(() => {
+    if (!doRefresh) {
+      setInterval(() => setDoRefresh(true), 2000);
+    }
+  }, [doRefresh]);
+  const ref = useRef();
+  ref.current = doRefresh;
+
+  // handle WebSocket
+  const [ws, setWs] = useState(null);
+  useEffect(() => {
+    if (ws && (ws.OPEN || ws.CONNECTING)) {
+      return;
+    }
+
+    const socket = new WebSocket(WS_URL);
+    socket.onopen = () => console.log('WS connection established');
+    socket.onclose = () => setWs(null);
+    socket.onmessage = ({ data }) => {
+      ref.current && data === 'refresh' && dispatch(fetchAllTodos());
+    };
+
+    setWs(socket);
+  }, [dispatch, ws]);
+
+  return (
+    <>
+      <Submitting active={submitting} />
+      <Header />
+      <NewTodo />
+      <DragDropArea disableRefresh={disableRefresh} />
+      <Filter />
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   submitting: state.submitting,
