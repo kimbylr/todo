@@ -19,16 +19,15 @@ const App = ({ submitting, dispatch }) => {
     setPassphraseAndFetch(dispatch);
   }, [dispatch]);
 
-  // block refreshing (move todo) - super hack
+  // block refreshing (when moving todo) for 2s
+  // otherwise context would be switched after refresh
   const [doRefresh, setDoRefresh] = useState(true);
-  const disableRefresh = () => setDoRefresh(false);
-  useEffect(() => {
-    if (!doRefresh) {
-      setInterval(() => setDoRefresh(true), 2000);
-    }
-  }, [doRefresh]);
-  const ref = useRef();
-  ref.current = doRefresh;
+  const disableRefresh = () => {
+    setDoRefresh(false);
+    setInterval(() => setDoRefresh(true), 2000);
+  };
+  const shouldRefetch = useRef();
+  shouldRefetch.current = doRefresh;
 
   // handle WebSocket
   const [ws, setWs] = useState(null);
@@ -41,7 +40,7 @@ const App = ({ submitting, dispatch }) => {
     socket.onopen = () => console.log('WS connection established');
     socket.onclose = () => setWs(null);
     socket.onmessage = ({ data }) => {
-      ref.current && data === 'refresh' && dispatch(fetchAllTodos());
+      shouldRefetch.current && data === 'refresh' && dispatch(fetchAllTodos());
     };
 
     setWs(socket);
