@@ -41,8 +41,12 @@ export const changeTodo = (todo, activeContext) => ({
   activeContext,
 });
 
-export const triggerCompleted = todo => (dispatch, getState) => {
-  const activeContext = getState().activeContext;
+// TODO: refactor - "activeContextFacultative" allows changing todo in other context (used while moving)
+export const triggerCompleted = (todo, activeContextFacultative) => (
+  dispatch,
+  getState,
+) => {
+  const activeContext = activeContextFacultative || getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todo.id;
   const params = getParams('PUT', getState().passphrase, {
     completed: !todo.completed,
@@ -55,11 +59,13 @@ export const triggerCompleted = todo => (dispatch, getState) => {
     .catch(error => console.log(error));
 };
 
-export const changeContent = (todoId, content, link) => (
-  dispatch,
-  getState,
-) => {
-  const activeContext = getState().activeContext;
+export const changeContent = (
+  todoId,
+  content,
+  link,
+  activeContextFacultative,
+) => (dispatch, getState) => {
+  const activeContext = activeContextFacultative || getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todoId;
   const params = getParams('PUT', getState().passphrase, { content, link });
 

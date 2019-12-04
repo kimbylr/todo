@@ -14,6 +14,11 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
     setLink(todo.link || '');
   }, [todo.link]);
 
+  // needed for refresh everything
+  useEffect(() => {
+    setContent(todo.content || '');
+  }, [todo.content]);
+
   const handleEdit = event => {
     event && event.preventDefault();
     if (content.trim() || link !== todo.link) {

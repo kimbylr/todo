@@ -36,7 +36,11 @@ class DragDropArea extends React.Component {
       const contextToMoveTo = droppableId.substring(CONTEXT_PREFIX.length);
 
       if (todo && contextToMoveTo) {
-        this.onDragToOtherContext(todo, contextToMoveTo);
+        this.onDragToOtherContext(
+          todo,
+          this.props.activeContext,
+          contextToMoveTo,
+        );
       }
     }
   };
@@ -51,7 +55,8 @@ class DragDropArea extends React.Component {
     dispatch(changeOrder(todoIds));
   };
 
-  onDragToOtherContext = async (todo, contextToMoveTo) => {
+  onDragToOtherContext = async (todo, activeContext, contextToMoveTo) => {
+    this.props.disableRefresh();
     const { dispatch } = this.props;
 
     // 1. add to other context
@@ -60,9 +65,16 @@ class DragDropArea extends React.Component {
 
     // 2. check off + add note
     if (!todo.completed) {
-      await dispatch(triggerCompleted(todo));
+      await dispatch(triggerCompleted(todo, activeContext));
     }
-    dispatch(changeContent(todo.id, `${NOTICE_MOVED}${todo.content}`));
+    dispatch(
+      changeContent(
+        todo.id,
+        `${NOTICE_MOVED}${todo.content}`,
+        todo.link,
+        activeContext,
+      ),
+    );
   };
 
   render() {
@@ -88,11 +100,11 @@ const mapStateToProps = state => {
 
   const todos = contexts[activeContext].todos || [];
   if (showPending && showCompleted) {
-    return { todos };
+    return { activeContext, todos };
   } else if (showPending) {
-    return { todos: todos.filter(todo => !todo.completed) };
+    return { activeContext, todos: todos.filter(todo => !todo.completed) };
   } else if (showCompleted) {
-    return { todos: todos.filter(todo => todo.completed) };
+    return { activeContext, todos: todos.filter(todo => todo.completed) };
   }
 };
 
