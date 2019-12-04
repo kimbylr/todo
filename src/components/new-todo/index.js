@@ -4,16 +4,35 @@ import { addTodo } from '../../store/actions/todos';
 import Overlay from '../../blueprints/overlay';
 import styles from './styles';
 
+const ECHO_LINK_BASE = 'https://www.srf.ch/play/radio/echo-der-zeit/';
+
+const transformEchoLink = async (content, link) => {
+  if (content.startsWith(ECHO_LINK_BASE)) {
+    try {
+      const response = await fetch(content);
+      const body = await response.text();
+      const title = body
+        .split('<title>')[1]
+        .split(' - Radio - Play SRF</title>')[0];
+      return { content: title, link: content };
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return { content, link: link || undefined };
+};
+
 const NewTodo = ({ dispatch }) => {
   const [content, setContent] = useState('');
   const [showLink, setShowLink] = useState(false);
   const [link, setLink] = useState('');
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     if (content) {
-      dispatch(addTodo({ content, link: link || undefined }));
+      dispatch(addTodo(await transformEchoLink(content, link)));
       setContent('');
       setLink('');
     }
