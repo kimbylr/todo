@@ -21,6 +21,18 @@ const Todo = styled.li`
       : ''}
 `;
 
+const DividerTodo = styled.li`
+  width: 100%;
+  padding: 17px 0 20px;
+`;
+
+const Divider = styled.div`
+  width: 50%;
+  margin: 0 auto;
+  height: 0;
+  border-bottom: 2px dashed #999;
+`;
+
 const Link = styled.a`
   color: #999;
 `;
@@ -85,6 +97,8 @@ const OverlayInput = styled.input`
 
 export default {
   Todo,
+  DividerTodo,
+  Divider,
   Link,
   Input,
   ButtonArea,

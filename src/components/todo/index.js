@@ -44,6 +44,21 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
   const { content: initialContent, link: initialLink, id, completed } = todo;
   const { innerRef, dragHandleProps, draggableProps } = dragRelatedProps;
 
+  if (content === '---') {
+    return (
+      <styles.DividerTodo
+        completed={completed}
+        onClick={() => dispatch(triggerCompleted(todo))}
+        ref={innerRef}
+        {...draggableProps}
+        {...dragHandleProps}
+        isDragging={isDragging}
+      >
+        <styles.Divider />{' '}
+      </styles.DividerTodo>
+    );
+  }
+
   return (
     <styles.Todo
       completed={completed}
