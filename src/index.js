@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import Filter from './components/filter';
@@ -12,46 +12,40 @@ import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 import { fetchAllTodos } from './store/actions/contexts';
 
-const WS_URL = process.env.REACT_APP_WS_URL;
-
 const App = ({ submitting, dispatch }) => {
+  const [lastEdit, setLastEdit] = useState(null);
+
   useEffect(() => {
     setPassphraseAndFetch(dispatch);
   }, [dispatch]);
 
-  // block refreshing (when moving todo) for 2s
-  // otherwise context would be switched after refresh
-  const [doRefresh, setDoRefresh] = useState(true);
-  const disableRefresh = () => {
-    setDoRefresh(false);
-    setInterval(() => setDoRefresh(true), 2000);
-  };
-  const shouldRefetch = useRef();
-  shouldRefetch.current = doRefresh;
-
-  // handle WebSocket
-  const [ws, setWs] = useState(null);
+  // polling while window is in focus
   useEffect(() => {
-    if (ws && (ws.OPEN || ws.CONNECTING)) {
+    if (!lastEdit) {
+      console.log('last update == null -> abort');
       return;
     }
 
-    const socket = new WebSocket(WS_URL);
-    socket.onopen = () => console.log('WS connection established');
-    socket.onclose = () => setWs(null);
-    socket.onmessage = ({ data }) => {
-      shouldRefetch.current && data === 'refresh' && dispatch(fetchAllTodos());
-    };
+    console.log(222);
 
-    setWs(socket);
-  }, [dispatch, ws]);
+    window.addEventListener('focus', () => {
+      // polling –> if timestamp newer: dispatch(fetchAllTodos())
+    });
+    window.addEventListener('blur', () => {
+      // stop polling
+    });
+
+    // return () => {
+    //   window.removeEventListener()
+    // };
+  }, [lastEdit]);
 
   return (
     <>
       <Submitting active={submitting} />
       <Header />
       <NewTodo />
-      <DragDropArea disableRefresh={disableRefresh} />
+      <DragDropArea />
       <Filter />
     </>
   );
