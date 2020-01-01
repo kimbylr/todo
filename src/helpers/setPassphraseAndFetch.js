@@ -9,6 +9,4 @@ export const setPassphraseAndFetch = async dispatch => {
   }
   dispatch(setPassphrase(passphrase));
   await dispatch(fetchAllTodos());
-
-  // dispatch get last edit
 };

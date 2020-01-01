@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import Filter from './components/filter';
@@ -7,38 +7,18 @@ import NewTodo from './components/new-todo';
 import { Submitting } from './components/submitting';
 import DragDropArea from './compositions/drag-drop-area';
 import { setPassphraseAndFetch } from './helpers/setPassphraseAndFetch';
+import { usePolling } from './helpers/usePolling';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
-import { fetchAllTodos } from './store/actions/contexts';
 
-const App = ({ submitting, dispatch }) => {
-  const [lastEdit, setLastEdit] = useState(null);
-
+const App = ({ submitting, passphrase, dispatch }) => {
+  // initial fetch
   useEffect(() => {
     setPassphraseAndFetch(dispatch);
   }, [dispatch]);
 
-  // polling while window is in focus
-  useEffect(() => {
-    if (!lastEdit) {
-      console.log('last update == null -> abort');
-      return;
-    }
-
-    console.log(222);
-
-    window.addEventListener('focus', () => {
-      // polling –> if timestamp newer: dispatch(fetchAllTodos())
-    });
-    window.addEventListener('blur', () => {
-      // stop polling
-    });
-
-    // return () => {
-    //   window.removeEventListener()
-    // };
-  }, [lastEdit]);
+  usePolling(passphrase, dispatch);
 
   return (
     <>
@@ -53,6 +33,7 @@ const App = ({ submitting, dispatch }) => {
 
 const mapStateToProps = state => ({
   submitting: state.submitting,
+  passphrase: state.passphrase,
 });
 
 const ConnectedApp = connect(mapStateToProps)(App);
