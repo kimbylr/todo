@@ -56,7 +56,6 @@ class DragDropArea extends React.Component {
   };
 
   onDragToOtherContext = async (todo, activeContext, contextToMoveTo) => {
-    this.props.disableRefresh();
     const { dispatch } = this.props;
 
     // 1. add to other context
