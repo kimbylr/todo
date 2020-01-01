@@ -7,7 +7,7 @@ import NewTodo from './components/new-todo';
 import { Submitting } from './components/submitting';
 import DragDropArea from './compositions/drag-drop-area';
 import { setPassphraseAndFetch } from './helpers/setPassphraseAndFetch';
-import { usePolling } from './helpers/usePolling';
+import { useRefreshOnFocus } from './helpers/useRefreshOnFocus';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
@@ -18,7 +18,7 @@ const App = ({ submitting, passphrase, dispatch }) => {
     setPassphraseAndFetch(dispatch);
   }, [dispatch]);
 
-  usePolling(passphrase, dispatch);
+  useRefreshOnFocus(passphrase, dispatch);
 
   return (
     <>
