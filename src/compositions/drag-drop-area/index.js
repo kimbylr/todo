@@ -65,8 +65,8 @@ class DragDropArea extends React.Component {
     }
 
     // 2. add to other context
-    const { content } = todo;
-    await dispatch(addTodo({ content }, contextToMoveTo));
+    const { content, link } = todo;
+    await dispatch(addTodo({ content, link }, contextToMoveTo));
 
     // 3. add note "moved" in active context
     const contentWithNote = `${NOTICE_MOVED}${todo.content}`;

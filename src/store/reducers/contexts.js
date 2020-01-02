@@ -15,6 +15,7 @@ import {
   todos: [{}, {} {
     completed: boolean,
     content: "...",
+    link: "..." | null | undefined,
     id: '5a3b871fee56c85faf6c4056',
     updatedAt: '2019-02-17T17:29:51.747Z'
   }],
