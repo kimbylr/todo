@@ -206,7 +206,9 @@ const mapStateToProps = state => ({
   contexts: Object.values(state.contexts)
     .sort(({ updatedAt: a }, { updatedAt: b }) => b - a)
     .map(({ id, label, todos }) => {
-      const count = todos.filter(({ completed }) => !completed).length;
+      const count = todos.filter(
+        ({ completed, content }) => !completed && content !== '---',
+      ).length;
       return { id, label, count };
     }),
 });

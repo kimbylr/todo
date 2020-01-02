@@ -27,7 +27,6 @@ const NewTodo = ({ dispatch }) => {
           placeholder="ztond"
           value={content}
           onChange={({ currentTarget: { value } }) => setContent(value)}
-          autoFocus
         />
         <styles.LinkButton
           active={!!link}
