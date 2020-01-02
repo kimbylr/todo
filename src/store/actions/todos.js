@@ -54,7 +54,7 @@ export const triggerCompleted = (todo, activeContextFacultative) => (
 
   dispatch(SET_SUBMITTING_TRUE);
 
-  // !! optimistic update !! -> will be overwritten
+  // !! optimistic update (mostly for move to other context) !! -> will be overwritten
   const todoBefore = getState().contexts[activeContext][todo.id];
   dispatch(changeTodo({ ...todo, completed: !todo.completed }, activeContext));
 
