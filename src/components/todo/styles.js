@@ -33,6 +33,28 @@ const Divider = styled.div`
   border-bottom: 2px dashed #999;
 `;
 
+const DividerTodoWithText = styled.li`
+  margin: 0 0 3px;
+  padding: 8px 0;
+
+  display: flex;
+  flex: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DividerWithText = styled(Divider)`
+  width: 9%;
+  margin: 0;
+`;
+
+const TextBetweenDividers = styled.div`
+  padding: 0 16px;
+  color: #666;
+  font-size: 20px;
+`;
+
 const Link = styled.a`
   color: #999;
 `;
@@ -99,6 +121,9 @@ export default {
   Todo,
   DividerTodo,
   Divider,
+  DividerTodoWithText,
+  DividerWithText,
+  TextBetweenDividers,
   Link,
   Input,
   ButtonArea,

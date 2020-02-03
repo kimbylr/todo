@@ -54,8 +54,27 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
         {...dragHandleProps}
         isDragging={isDragging}
       >
-        <styles.Divider />{' '}
+        <styles.Divider />
       </styles.DividerTodo>
+    );
+  }
+
+  if (content && content.startsWith('---')) {
+    return (
+      <styles.DividerTodoWithText
+        completed={completed}
+        onClick={() => dispatch(triggerCompleted(todo))}
+        ref={innerRef}
+        {...draggableProps}
+        {...dragHandleProps}
+        isDragging={isDragging}
+      >
+        <styles.DividerWithText />
+        <styles.TextBetweenDividers>
+          {content.substring(3).trim()}
+        </styles.TextBetweenDividers>
+        <styles.DividerWithText />
+      </styles.DividerTodoWithText>
     );
   }
 
