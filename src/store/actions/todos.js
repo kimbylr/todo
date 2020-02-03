@@ -53,10 +53,21 @@ export const triggerCompleted = (todo, activeContextFacultative) => (
   });
 
   dispatch(SET_SUBMITTING_TRUE);
+
+  // !! optimistic update (mostly for move to other context) !! -> will be overwritten
+  const todoBefore = getState().contexts[activeContext][todo.id];
+  dispatch(changeTodo({ ...todo, completed: !todo.completed }, activeContext));
+
   return fetch(url, params)
     .then(response => response.json())
-    .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => console.log(error));
+    .then(todo => {
+      // probably == optimistic, but let's stay consistent
+      dispatch(changeTodo(todo, activeContext));
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(changeTodo(todoBefore, activeContext));
+    });
 };
 
 export const changeContent = (

@@ -58,22 +58,19 @@ class DragDropArea extends React.Component {
   onDragToOtherContext = async (todo, activeContext, contextToMoveTo) => {
     const { dispatch } = this.props;
 
-    // 1. add to other context
-    const { content } = todo;
-    await dispatch(addTodo({ content }, contextToMoveTo));
-
-    // 2. check off + add note
+    // TODO: overly imperative. there should be an endpoint on the API for this.
+    // 1. check off -- slightly dangerous if adding fails, but done first because it triggers optimistic update
     if (!todo.completed) {
       await dispatch(triggerCompleted(todo, activeContext));
     }
-    dispatch(
-      changeContent(
-        todo.id,
-        `${NOTICE_MOVED}${todo.content}`,
-        todo.link,
-        activeContext,
-      ),
-    );
+
+    // 2. add to other context
+    const { content, link } = todo;
+    await dispatch(addTodo({ content, link }, contextToMoveTo));
+
+    // 3. add note "moved" in active context
+    const contentWithNote = `${NOTICE_MOVED}${todo.content}`;
+    dispatch(changeContent(todo.id, contentWithNote, todo.link, activeContext));
   };
 
   render() {
