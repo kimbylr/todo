@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+export const Container = styled.div`
   background-color: #d2e4f0;
   height: 60px;
   padding: 24px;
 `;
 
-const Form = styled.form`
+export const Form = styled.form`
   position: relative;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   width: calc(100% - 45px);
   height: 40px;
   font-size: 24px;
@@ -28,26 +28,56 @@ const Input = styled.input`
   }
 `;
 
-const LinkButton = styled.button`
+export const LinkButton = styled.button`
   position: absolute;
   padding: 2px;
   color: ${({ active }) => (active ? '#69a6ce' : '#999')};
   background: transparent;
   top: 20px;
-  right: 10px;
+  right: 36px;
   cursor: pointer;
   &:hover {
     color: #333;
   }
 `;
 
-const Overlay = styled.form`
+export const PrependButton = styled(LinkButton)`
+  content: '';
+  right: 10px;
+  width: 13px;
+  height: 12px;
+  margin-top: 6px;
+
+  ${({ prepend }) =>
+    prepend
+      ? `
+    border-top: 2px solid #69a6ce;
+    border-bottom: 2px solid #ccc;
+  `
+      : `
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #69a6ce;
+  `}
+
+  /** middle line */
+  ::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    background: #ccc;
+    width: 100%;
+    height: 2px;
+  }
+`;
+
+export const Overlay = styled.form`
   background-color: #69a6ce;
   padding: 20px;
   box-shadow: 0 0 40px #222;
 `;
 
-const OverlayIcon = styled.span`
+export const OverlayIcon = styled.span`
   display: inline-block;
   font-weight: 400;
   font-size: 24px;
@@ -57,7 +87,7 @@ const OverlayIcon = styled.span`
   top: 2px;
 `;
 
-const OverlayInput = styled.input`
+export const OverlayInput = styled.input`
   max-width: 80vw;
   font-size: 20px;
   padding: 0 10px;
@@ -74,13 +104,3 @@ const OverlayInput = styled.input`
     color: rgba(255, 255, 255, 0.25);
   }
 `;
-
-export default {
-  Container,
-  Form,
-  Input,
-  LinkButton,
-  Overlay,
-  OverlayIcon,
-  OverlayInput,
-};

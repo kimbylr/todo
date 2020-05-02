@@ -25,7 +25,7 @@ const contexts = (state = {}, action) => {
   switch (action.type) {
     case SET_CONTEXTS: {
       const contexts = {};
-      action.payload.forEach(context => {
+      action.payload.forEach((context) => {
         const { id, label, todos, archived, updatedAt } = context;
         contexts[id] = { id, label, todos, archived, updatedAt };
       });
@@ -50,13 +50,15 @@ const contexts = (state = {}, action) => {
 
     case PUSH_TODO: {
       const context = state[action.activeContext];
-      const todos = [...context.todos, action.payload];
+      const todos = action.prepend
+        ? [action.payload, ...context.todos]
+        : [...context.todos, action.payload];
       return { ...state, [context.id]: { ...context, todos } };
     }
 
     case CHANGE_TODO: {
       const { activeContext, payload: changedTodo } = action;
-      const todos = state[activeContext].todos.map(todo => {
+      const todos = state[activeContext].todos.map((todo) => {
         return todo.id === changedTodo.id ? changedTodo : todo;
       });
 
@@ -70,10 +72,7 @@ const contexts = (state = {}, action) => {
       const currentContextId = action.activeContext;
       const sorting = action.payload;
       const todos = state[currentContextId].todos;
-
-      const reorderedTodos = sorting.map(id =>
-        todos.find(todo => todo.id === id),
-      );
+      const reorderedTodos = sorting.map((id) => todos.find((todo) => todo.id === id));
 
       return {
         ...state,
