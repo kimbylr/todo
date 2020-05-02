@@ -17,22 +17,23 @@ const getParams = (method, passphrase, body) => ({
   body: JSON.stringify(body),
 });
 
-export const pushTodo = (todo, activeContext) => ({
+export const pushTodo = (todo, activeContext, prepend) => ({
   type: PUSH_TODO,
   payload: todo,
   activeContext,
+  prepend,
 });
 
-export const addTodo = ({ content, link }, context) => (dispatch, getState) => {
+export const addTodo = ({ content, link, prepend }, context) => (dispatch, getState) => {
   const activeContext = context || getState().activeContext;
   const url = API_BASE_URL + activeContext;
-  const params = getParams('POST', getState().passphrase, { content, link });
+  const params = getParams('POST', getState().passphrase, { content, link, prepend });
 
   dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
-    .then(response => response.json())
-    .then(todo => dispatch(pushTodo(todo, activeContext)))
-    .catch(error => console.log(error));
+    .then((response) => response.json())
+    .then((todo) => dispatch(pushTodo(todo, activeContext, prepend)))
+    .catch((error) => console.log(error));
 };
 
 export const changeTodo = (todo, activeContext) => ({
@@ -42,10 +43,7 @@ export const changeTodo = (todo, activeContext) => ({
 });
 
 // TODO: refactor - "activeContextFacultative" allows changing todo in other context (used while moving)
-export const triggerCompleted = (todo, activeContextFacultative) => (
-  dispatch,
-  getState,
-) => {
+export const triggerCompleted = (todo, activeContextFacultative) => (dispatch, getState) => {
   const activeContext = activeContextFacultative || getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todo.id;
   const params = getParams('PUT', getState().passphrase, {
@@ -59,32 +57,30 @@ export const triggerCompleted = (todo, activeContextFacultative) => (
   dispatch(changeTodo({ ...todo, completed: !todo.completed }, activeContext));
 
   return fetch(url, params)
-    .then(response => response.json())
-    .then(todo => {
+    .then((response) => response.json())
+    .then((todo) => {
       // probably == optimistic, but let's stay consistent
       dispatch(changeTodo(todo, activeContext));
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
       dispatch(changeTodo(todoBefore, activeContext));
     });
 };
 
-export const changeContent = (
-  todoId,
-  content,
-  link,
-  activeContextFacultative,
-) => (dispatch, getState) => {
+export const changeContent = (todoId, content, link, activeContextFacultative) => (
+  dispatch,
+  getState
+) => {
   const activeContext = activeContextFacultative || getState().activeContext;
   const url = API_BASE_URL + activeContext + '/' + todoId;
   const params = getParams('PUT', getState().passphrase, { content, link });
 
   dispatch(SET_SUBMITTING_TRUE);
   return fetch(url, params)
-    .then(response => response.json())
-    .then(todo => dispatch(changeTodo(todo, activeContext)))
-    .catch(error => console.log(error));
+    .then((response) => response.json())
+    .then((todo) => dispatch(changeTodo(todo, activeContext)))
+    .catch((error) => console.log(error));
 };
 
 export const changeTodos = (activeContext, todos) => ({
@@ -99,7 +95,7 @@ export const reorderTodosOptimistic = (activeContext, todoIds) => ({
   activeContext,
 });
 
-export const changeOrder = ids => (dispatch, getState) => {
+export const changeOrder = (ids) => (dispatch, getState) => {
   const activeContext = getState().activeContext;
   const url = API_BASE_URL + activeContext + '/order/';
   const params = getParams('PUT', getState().passphrase, ids);
@@ -111,9 +107,9 @@ export const changeOrder = ids => (dispatch, getState) => {
   dispatch(reorderTodosOptimistic(activeContext, ids));
 
   return fetch(url, params)
-    .then(response => response.json())
-    .then(todos => dispatch(changeTodos(activeContext, todos)))
-    .catch(error => {
+    .then((response) => response.json())
+    .then((todos) => dispatch(changeTodos(activeContext, todos)))
+    .catch((error) => {
       console.log(error);
       dispatch(changeTodos(activeContext, todosBefore));
     });
