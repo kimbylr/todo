@@ -207,7 +207,7 @@ const mapStateToProps = state => ({
     .sort(({ updatedAt: a }, { updatedAt: b }) => b - a)
     .map(({ id, label, todos }) => {
       const count = todos.filter(
-        ({ completed, content }) => !completed && content !== '---',
+        ({ completed, content }) => !completed && !content.startsWith('---'),
       ).length;
       return { id, label, count };
     }),
