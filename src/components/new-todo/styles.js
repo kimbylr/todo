@@ -11,10 +11,11 @@ export const Form = styled.form`
 `;
 
 export const Input = styled.input`
-  width: calc(100% - 45px);
-  height: 40px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 42px;
   font-size: 24px;
-  padding: 0 36px 0 10px;
+  padding: 0 60px 0 10px;
   border: 0px;
   margin-top: 10px;
   border: 1px solid #ccc;
@@ -43,7 +44,7 @@ export const LinkButton = styled.button`
 
 export const PrependButton = styled(LinkButton)`
   content: '';
-  right: 10px;
+  right: 12px;
   width: 13px;
   height: 12px;
   margin-top: 6px;
