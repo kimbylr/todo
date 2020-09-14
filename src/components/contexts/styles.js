@@ -14,7 +14,7 @@ const ContextButton = styled.button`
   font-size: 16px;
   font-weight: 500;
   text-decoration: none;
-  cursor: default;
+  cursor: pointer;
   position: relative;
   color: ${({ active }) => (active ? '#fcfcfc' : '#69a6ce')};
   background-color: ${({ active }) => (active ? '#69a6ce' : '#fcfcfc')};
