@@ -42,7 +42,7 @@ const NewTodo = ({ dispatch }) => {
           type="button"
           onClick={() => setPrepend(!prepend)}
           title={prepend ? 'attach to end' : 'prepend'}
-        ></styles.PrependButton>
+        />
       </styles.Form>
 
       {

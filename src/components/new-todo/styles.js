@@ -11,8 +11,9 @@ export const Form = styled.form`
 `;
 
 export const Input = styled.input`
-  width: calc(100% - 45px);
-  height: 40px;
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+  height: 42px;
   font-size: 24px;
   padding: 0 36px 0 10px;
   border: 0px;
@@ -34,7 +35,7 @@ export const LinkButton = styled.button`
   color: ${({ active }) => (active ? '#69a6ce' : '#999')};
   background: transparent;
   top: 20px;
-  right: 36px;
+  right: 44px;
   cursor: pointer;
   &:hover {
     color: #333;
@@ -43,20 +44,20 @@ export const LinkButton = styled.button`
 
 export const PrependButton = styled(LinkButton)`
   content: '';
-  right: 10px;
-  width: 13px;
-  height: 12px;
-  margin-top: 6px;
+  right: 0;
+  width: 20px;
+  height: 17px;
+  margin-top: 3px;
 
   ${({ prepend }) =>
     prepend
       ? `
-    border-top: 2px solid #69a6ce;
-    border-bottom: 2px solid #ccc;
+    border-top: 3px solid #69a6ce;
+    border-bottom: 3px solid #fff;
   `
       : `
-    border-top: 2px solid #ccc;
-    border-bottom: 2px solid #69a6ce;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #69a6ce;
   `}
 
   /** middle line */
@@ -64,10 +65,10 @@ export const PrependButton = styled(LinkButton)`
     content: '';
     position: absolute;
     left: 0;
-    top: 3px;
-    background: #ccc;
+    top: 4px;
+    background: #fff;
     width: 100%;
-    height: 2px;
+    height: 3px;
   }
 `;
 
