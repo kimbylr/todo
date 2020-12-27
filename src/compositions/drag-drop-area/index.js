@@ -1,15 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
-import {
-  changeOrder,
-  triggerCompleted,
-  changeContent,
-  addTodo,
-} from '../../store/actions/todos';
-
-import Contexts from '../../components/contexts';
-import Todos from '../todos';
+import { connect } from 'react-redux';
+import { addTodo, changeContent, changeOrder, triggerCompleted } from '../../store/actions/todos';
 
 const TODO_LIST = 'todo-list';
 const CONTEXT_PREFIX = 'context-';
@@ -36,11 +28,7 @@ class DragDropArea extends React.Component {
       const contextToMoveTo = droppableId.substring(CONTEXT_PREFIX.length);
 
       if (todo && contextToMoveTo) {
-        this.onDragToOtherContext(
-          todo,
-          this.props.activeContext,
-          contextToMoveTo,
-        );
+        this.onDragToOtherContext(todo, this.props.activeContext, contextToMoveTo);
       }
     }
   };
@@ -74,16 +62,11 @@ class DragDropArea extends React.Component {
   };
 
   render() {
-    return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Contexts />
-        <Todos />
-      </DragDropContext>
-    );
+    return <DragDropContext onDragEnd={this.onDragEnd}>{this.props.children}</DragDropContext>;
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const {
     contexts,
     activeContext,
@@ -98,9 +81,9 @@ const mapStateToProps = state => {
   if (showPending && showCompleted) {
     return { activeContext, todos };
   } else if (showPending) {
-    return { activeContext, todos: todos.filter(todo => !todo.completed) };
+    return { activeContext, todos: todos.filter((todo) => !todo.completed) };
   } else if (showCompleted) {
-    return { activeContext, todos: todos.filter(todo => todo.completed) };
+    return { activeContext, todos: todos.filter((todo) => todo.completed) };
   }
 };
 

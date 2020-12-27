@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Overlay from '../../blueprints/overlay';
-import { changeContent, triggerCompleted } from '../../store/actions/todos';
-import styles from './styles';
 import { selectAllText } from '../../helpers/selectAllText';
+import { changeContent, triggerCompleted } from '../../store/actions/todos';
+import * as styles from './styles';
 
 const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
   const [editing, setEditing] = useState(false);
@@ -19,7 +19,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
     setContent(todo.content || '');
   }, [todo.content]);
 
-  const handleEdit = event => {
+  const handleEdit = (event) => {
     event && event.preventDefault();
     if (content.trim() || link !== todo.link) {
       dispatch(changeContent(id, content, link || null));
@@ -32,7 +32,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
     handleEdit();
   };
 
-  const evaluateLink = event => {
+  const evaluateLink = (event) => {
     event.preventDefault();
     setEditLink(false);
     if (!link) {
@@ -70,9 +70,7 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
         isDragging={isDragging}
       >
         <styles.DividerWithText />
-        <styles.TextBetweenDividers>
-          {content.substring(3).trim()}
-        </styles.TextBetweenDividers>
+        <styles.TextBetweenDividers>{content.substring(3).trim()}</styles.TextBetweenDividers>
         <styles.DividerWithText />
       </styles.DividerTodoWithText>
     );
@@ -118,32 +116,34 @@ const Todo = ({ todo, dispatch, isDragging, dragRelatedProps }) => {
           />
         </form>
       ) : (
-        <div onClick={() => dispatch(triggerCompleted(todo))}>{content}</div>
+        <styles.Content onClick={() => dispatch(triggerCompleted(todo))}>{content}</styles.Content>
       )}
 
-      {/* edit link overlay */
-      editLink && (
-        <Overlay
-          clickOffsideFn={() => {
-            setLink(initialLink || '');
-            setEditLink(false);
-          }}
-        >
-          <styles.Overlay onSubmit={evaluateLink}>
-            <styles.OverlayIcon>
-              <i className="ion-ios-link" />
-            </styles.OverlayIcon>
-            <styles.OverlayInput
-              type="text"
-              placeholder="https://..."
-              value={link || ''}
-              onChange={({ currentTarget: { value } }) => setLink(value)}
-              autoFocus
-              onFocus={selectAllText}
-            />
-          </styles.Overlay>
-        </Overlay>
-      )}
+      {
+        /* edit link overlay */
+        editLink && (
+          <Overlay
+            clickOffsideFn={() => {
+              setLink(initialLink || '');
+              setEditLink(false);
+            }}
+          >
+            <styles.Overlay onSubmit={evaluateLink}>
+              <styles.OverlayIcon>
+                <i className="ion-ios-link" />
+              </styles.OverlayIcon>
+              <styles.OverlayInput
+                type="text"
+                placeholder="https://..."
+                value={link || ''}
+                onChange={({ currentTarget: { value } }) => setLink(value)}
+                autoFocus
+                onFocus={selectAllText}
+              />
+            </styles.Overlay>
+          </Overlay>
+        )
+      }
     </styles.Todo>
   );
 };

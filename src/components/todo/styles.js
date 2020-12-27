@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Todo = styled.li`
+export const Todo = styled.li`
   margin: 0 0 3px;
   padding: 8px 25px;
   color: #333;
@@ -21,19 +21,19 @@ const Todo = styled.li`
       : ''}
 `;
 
-const DividerTodo = styled.li`
+export const DividerTodo = styled.li`
   width: 100%;
   padding: 17px 0 20px;
 `;
 
-const Divider = styled.div`
+export const Divider = styled.div`
   width: 50%;
   margin: 0 auto;
   height: 0;
   border-bottom: 2px dashed #999;
 `;
 
-const DividerTodoWithText = styled.li`
+export const DividerTodoWithText = styled.li`
   margin: 0 0 3px;
   padding: 8px 0;
 
@@ -44,28 +44,33 @@ const DividerTodoWithText = styled.li`
   align-items: center;
 `;
 
-const DividerWithText = styled(Divider)`
+export const DividerWithText = styled(Divider)`
   width: 9%;
   margin: 0;
 `;
 
-const TextBetweenDividers = styled.div`
+export const TextBetweenDividers = styled.div`
   padding: 0 16px;
   color: #666;
   font-size: 20px;
 `;
 
-const Link = styled.a`
+export const Link = styled.a`
   color: #999;
 `;
 
-const Input = styled.input`
+export const Content = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const Input = styled.input`
   color: #69a6ce;
   background: transparent;
   width: calc(100% - 60px);
 `;
 
-const ButtonArea = styled.div`
+export const ButtonArea = styled.div`
   float: right;
   color: #999;
   font-size: 16px;
@@ -73,7 +78,7 @@ const ButtonArea = styled.div`
   top: 2px;
 `;
 
-const IconButton = styled.i`
+export const IconButton = styled.i`
   padding: 3px 0;
 
   margin-left: 12px;
@@ -83,13 +88,13 @@ const IconButton = styled.i`
   ${({ active }) => (active ? 'color: #69a6ce;' : 'cursor: pointer;')}
 `;
 
-const Overlay = styled.form`
+export const Overlay = styled.form`
   background-color: #69a6ce;
   padding: 20px;
   box-shadow: 0 0 40px #222;
 `;
 
-const OverlayIcon = styled.span`
+export const OverlayIcon = styled.span`
   display: inline-block;
   font-weight: 400;
   font-size: 24px;
@@ -99,7 +104,7 @@ const OverlayIcon = styled.span`
   top: 2px;
 `;
 
-const OverlayInput = styled.input`
+export const OverlayInput = styled.input`
   max-width: 80vw;
   font-size: 20px;
   padding: 0 10px;
@@ -116,19 +121,3 @@ const OverlayInput = styled.input`
     color: rgba(255, 255, 255, 0.25);
   }
 `;
-
-export default {
-  Todo,
-  DividerTodo,
-  Divider,
-  DividerTodoWithText,
-  DividerWithText,
-  TextBetweenDividers,
-  Link,
-  Input,
-  ButtonArea,
-  IconButton,
-  Overlay,
-  OverlayIcon,
-  OverlayInput,
-};

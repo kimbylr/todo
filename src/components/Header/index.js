@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const StyledHeader = styled.header`
   background-color: #69a6ce;
   height: 80px;
-  padding: 20px;
+  padding: max(env(safe-area-inset-top), 16px) 0 16px;
   text-align: center;
 
   & img {
